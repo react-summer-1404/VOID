@@ -1,9 +1,8 @@
-import "../../assets/style/contentSt.css";
+import "../../../assets/style/contentSt.css";
 import {useState,useEffect} from "react";
-import useToggle from "../../hook/useToggle.js"
-import Main from "./contentPart/mainPart.jsx"
-import Side from "./contentPart/sidePart.jsx"
-import image from "../../assets/style/ip17.jpg"
+import useToggle from "../../../hook/useToggle.js"
+import Side from "../courseContent/sidePart.jsx"
+import image from "../../../assets/style/ip17.jpg"
 
 const courseContent=()=>{
    const[view,setview] = useState("view1");

@@ -1,4 +1,4 @@
-import "../../assets/style/headerSt.css"
+import "../../../assets/style/headerSt.css"
 const courseHeader=()=>{
 
 

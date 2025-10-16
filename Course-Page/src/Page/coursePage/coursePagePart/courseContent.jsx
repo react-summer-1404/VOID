@@ -1,8 +1,11 @@
-import "../../../assets/style/contentSt.css";
+// import "../../../assets/style/contentSt.css";
+import "../../../assets/style/tailwinds/tailwindSt(content).css"
 import {useState,useEffect} from "react";
 import useToggle from "../../../hook/useToggle.js"
 import Side from "../courseContent/sidePart.jsx"
-import image from "../../../assets/style/ip17.jpg"
+import image from "../../../assets/ip17.jpg"
+import ProductList from "../../../component/productList.jsx"
+// import "../../../assets/style/productSt.css"
 
 const courseContent=()=>{
    const[view,setview] = useState("view1");
@@ -40,31 +43,21 @@ const courseContent=()=>{
 				</ul>
 			</div>
            <div className="viewBox">
-			<div className="view sel" onClick={()=>setview("view1")}> view1  </div>
 			<div className="view" onClick={()=>setview("view2")}> view2  </div>  
+			<div className="view sel" onClick={()=>setview("view1")}> view1  </div>
             </div>
 		</div>
 
-		<div id="grid" className={view}> 
-       {/* onClick={showBook(0)} */}
-		<div className="items"> 
-				<img src={image}/>	
-				<span className="offLable"> 20% </span>	
-				
-				<div className="info">
-					<h2> نام کتاب </h2>
-					<span className="writer"> جفر </span>
-					<span className="star">  </span>
-					<p className="describe"> خلاصه کتاب </p>	
-					<span className="price"> 25000 ریال <i> 20000 ریال</i> </span>				
-				</div>
-			</div>
+		<div id="grid" className={view}>
 
-		    </div>		
-	     </div>
+			<ProductList/>
+
+		</div>	
+
+	</div>
 
 
-         </div>
+ </div>
 
   )
 }

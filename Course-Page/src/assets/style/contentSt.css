@@ -8,7 +8,7 @@
 }
 
 .courseContent > .main{
-	width: clamp(700px,60%,900px);
+	width: clamp(700px,60%,1200px);
 	min-height:1000px;	
 }
 .courseContent > .main > .set{
@@ -94,222 +94,11 @@
 	cursor:pointer;	
 }
 
-/*   view 1   */
-
-.courseContent > .main > #grid.view1{
-	display:flex;
-	flex-flow:row wrap;
-	gap:10px;
-	justify-content:space-evenly;
-}
-/* .courseContent > .main > #grid.view1 > .items:hover > img{
-	filter:blur(2px);
-}
-.courseContent > .main > #grid.view1 > .items:hover > .info{
-	top:110px;
-} */
-
-.courseContent > .main > #grid.view1 > .items{
-	max-width:200px;
-	/* flex-grow:1; */
-	background:#fff;
-	border-radius:5px;	
-	font-size:10px;
-	/* overflow:hidden; */
-	position:relative;
-	height:260px;
-	border: 1px solid red;
-}
-.courseContent > .main > #grid.view1 > .items > img{
-	transition:0.5s;
-	width:100%;
-	margin:auto;
-	display:block;
-}
-
-.courseContent > .main > #grid.view1 > .items > .info{
-	/* transition:top 0.5s; */
-	background:rgba(255,255,255,0.95);
-	/* position:absolute; */
-	width:100%;
-	border:1px solid blue;
-	/* top:140px;	 */
-}
-.courseContent > .main > #grid.view1 > .items > .info > h2{
-	white-space:nowrap;
-	font-weight:500;
-	margin:10px;
-	border: 1px solid green;
-}
-.courseContent > .main > #grid.view1 > .items > .info > span{
-	display:block;
-	border:1px solid yellow;
-}
-.courseContent > .main > #grid.view1 > .items > .info > .writer{
-	margin-right:10px;
-	border: 1px solid black;
-}
-.courseContent > .main > #grid.view1 > .items > .info > .star{
-	width:85px;
-	height:22px;
-	background-color: red;
-	margin:10px auto;
-	/* background:url(../images/icons/star1.png) repeat-x; */
-	background-size:17px;
-}
-.courseContent > .main > #grid.view1 > .items > .info > .price{
-	/* border-top:1px solid #ddd; */
-	margin:10px;
-	padding:7px;
-	font-family:mitra;
-	font-size:15px;
-	font-weight:600;
-}
-.courseContent > .main > #grid.view1 > .items > .info > .price > i{
-	color:red;
-	font-style:normal;
-	text-decoration:line-through;
-	font-size:13px;
-}
-.courseContent > .main > #grid.view1 > .items > .info > p,
-.courseContent > .main > #grid.view1 > .items > .info > .cat,
-.courseContent > .main > #grid.view1 > .items > .info > .stock{
-	display:none;
-}
-.courseContent > .main > #grid > .items > .offLable{
-	background:red;
-	width:35px;
-	padding:10px 0;
-	position:absolute;
-	border-radius:16px 0 30px 1px;
-	top:0;
-	left:0%;
-	color:#fff;
-	font-family:mitra;
-	text-align:center;
-	font-size:15px;
-	font-weight:800;
-}
-/*   view 2   */
-
-.courseContent > .main > #grid.view2{
-	display:flex;
-	flex-flow:column wrap;
-	gap:10px;
-}
-/* .courseContent > .main > #grid.view2 > .items:hover > img{
-	filter:blur(2px);
-}
-.courseContent > .main > #grid.view2 > .items:hover > .info{
-	top:110px;
-} */
-
-.courseContent > .main > #grid.view2 > .items{
-	width:100%;
-	flex-grow:1;
-	background:#fff;
-	border-radius:5px;	
-	font-size:10px;
-	overflow:hidden;
-	position:relative;
-	height:auto;
-	display:flex;
-	justify-content:space-around;
-}
-
-.courseContent > .main > #grid.view2 > .items > img{
-	transition:filter 0.5s;
-	width:140px;
-	margin:10px;
-	border-radius:5px;
-	box-shadow:0 0 50px 1px #eee;
-}
-
-.courseContent > .main > #grid.view2 > .items > .info{
-	position:static;
-	transition:top 0.5s;
-	/* background:red; */
-	/* position:absolute; */
-	width:78%;
-	/* top:140px;	 */
-}
-.courseContent > .main > #grid.view2 > .items > .info > h2{
-	font-weight:500;
-	margin:10px;
-}
-.courseContent > .main > #grid.view2 > .items > .info > span{
-	display:block;
-}
-.courseContent > .main > #grid.view2 > .items > .info > .writer{
-	margin-right:10px;
-}
-.courseContent > .main > #grid.view2 > .items > .info > .star{
-	width:85px;
-	height:22px;
-	background:url(../images/icons/star1.png) repeat-x;
-	background-size:17px;
-	float:left;
-	
-}
-.courseContent > .main > #grid.view2 > .items > .info > .price{
-	border-top:1px solid rgba(205,215,225,1);
-	margin:10px;
-	padding:7px;
-	font-family:mitra;
-	font-size:15px;
-	font-weight:600;
-}
-.courseContent > .main > #grid.view2 > .items > .info > .price > i{
-	color:red;
-	font-style:normal;
-	text-decoration:line-through;
-	font-size:13px;
-}
-.courseContent > .main > #grid.view2 > .items > .info > p{
-	display:block;
-	font-size:14px;
-	height:50px;
-	margin:15px 10px;
-	color:#444;
-}
-.courseContent > .main > #grid.view2 > .items > .info > .cat{
-	margin:10px;
-	padding:7px 10px;
-	font-size:12px;
-	background:lightblue;
-	border-radius:5px;
-	display:inline-block;
-	color:#fff;
-}
-.courseContent > .main > #grid.view2 > .items > .info > .stock{
-	margin:10px;
-	height:6px;
-	background:#eee;
-	width:120px;
-	border-radius:5px;
-	font-size:13px;
-	color:red;
-}
-.courseContent > .main > #grid.view2 > .items > .info > .stock > i{
-	height:6px;
-	background:orange;
-	width:50%;
-	border-radius:5px;
-	display:block;
-}
-
-.courseContent.hide,
-#detail.hide,
-#publisher.hide,
-#writer.hide,
-#basket.hide{
-	display:none;
-}
 
 /*  filters  */
 
 .courseContent > .side{
-	width:300px;
+	width:280px;
 	/* background:#fff; */
 	border-radius:5px;
 	/* padding:10px 0; */
@@ -506,6 +295,7 @@
 .price-filter {
   direction: rtl;
   width: 100%;
+  border: 1px solid red;
   /* background: #fff; */
   padding: 16px;
   /* border-radius: 16px; */
@@ -517,8 +307,7 @@
   color: #00897b;
   font-weight: 600;
   font-size: 14px;
-  margin-bottom: 12px;
-  text-align: left;
+  /* margin-bottom: 12px; */
 }
 
 /* 🔹 فقط برای اصلاح راست‌چین بودن ظاهر */
@@ -557,11 +346,15 @@
 .price-inputs {
   display: flex;
   justify-content: space-between;
-  margin-top: 18px;
+  margin-top: 5px;
+  border:1px solid blue;
 }
 
 .price-box {
   display: flex;
+  /* width: 200px; */
+  /* height: 50px; */
+  border:1px solid blue;
   flex-direction: column;
   align-items: flex-end;
 }
@@ -569,22 +362,22 @@
 .label {
   font-size: 12px;
   color: #666;
-  margin-bottom: 4px;
+  /* margin-bottom: 4px; */
 }
 
 .dropdown {
   background: #f3f3f3;
   border: 1px solid #d1d1d1;
   border-radius: 10px;
-  padding: 8px 12px;
-  min-width: 140px;
+  min-width: 100px;
+  height: 40px;
   font-size: 13px;
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
   cursor: pointer;
   color: #333;
-  transition: background 0.2s;
+  /* transition: background 0.2s; */
 }
 
 .dropdown:hover {

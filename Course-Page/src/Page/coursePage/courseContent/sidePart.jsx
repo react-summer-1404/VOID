@@ -2,7 +2,7 @@ import {useState} from "react"
 import useToggle from "../../../hook/useToggle"
 import Slider from "rc-slider"
 import "rc-slider/assets/index.css";
-import "../../../assets/style/contentSt.css"
+// import "../../../assets/style/contentSt.css"
 
 const sidePart =()=>{
 
@@ -16,7 +16,7 @@ const sidePart =()=>{
     setActive((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
-  const [range, setRange] = useState([0, 1000000]);
+  const [range, setRange] = useState([0, 100000000]);
 
   const handleChange = (value) => {
     setRange(value);

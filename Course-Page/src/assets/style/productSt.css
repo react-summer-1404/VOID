@@ -1,0 +1,264 @@
+
+/*   view 1   */
+
+.courseContent > .main > #grid.view1{
+	display:flex;
+	flex-flow:row wrap;
+	gap:10px;
+	justify-content:space-evenly;
+}
+/* .courseContent > .main > #grid.view1 > .productCard:hover > .Img{
+	filter:blur(2px);
+}
+.courseContent > .main > #grid.view1 > .productCard:hover > .info{
+	top:110px;
+} */
+
+.courseContent > .main > #grid.view1 >.productCard{
+	max-width:280px;
+	/* flex-grow:1; */
+	background:#fff;
+	border-radius:5px;	
+	font-size:10px;
+	overflow:hidden;
+	position:relative;
+	height:400px;
+	border: 4px solid rgb(155, 147, 147);
+    border-radius: 48px;
+    /* padding: 5px; */
+}
+.courseContent > .main > #grid.view1 >.productCard>.Image{
+	/* transition:0.5s; */
+	width:100%;
+	/* margin:auto; */
+	/* display:block; */
+    border-radius: 44px;
+    height: 100%;
+}
+.courseContent > .main > #grid.view1 >.productCard>.favorite{
+	position: absolute;
+    top: 25px;
+    right: 20px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid gray;
+}
+
+
+.courseContent > .main > #grid.view1 > .productCard > .info{
+	/* transition:top 0.5s; */
+	/* background:rgba(223, 223, 223, 0.084); */
+	position:absolute;
+    border-bottom-left-radius: 44px;
+    border-bottom-right-radius: 44px;
+	width:100%;
+    height: 200px;
+    color: white;
+	/* border:1px solid blue; */
+	top:200px;	
+    white-space:nowrap;
+	font-weight:500;
+    font-size: 15px;
+    padding: 5px;
+    backdrop-filter: blur(4px);
+    /* box-shadow: 0px -10px 5px rgba(151, 148, 148, 0.11) ; */
+}
+
+/* intro*/
+
+.courseContent > .main > #grid.view1 > .productCard > .info>.intro{
+    display: flex;
+    justify-content: space-between;
+    height: 20%;
+    
+}
+.courseContent > .main > #grid.view1 > .productCard > .info >.intro>.name{
+	border: 1px solid green;
+}
+.courseContent > .main > #grid.view1 > .productCard > .info >.intro>.star{
+	border: 1px solid green;
+    display: flex;
+    place-items: center;
+}
+.courseContent > .main > #grid.view1 > .productCard > .info >.intro>.star>img{
+	border: 1px solid green;
+    width: 100%;
+}
+
+
+/* teacherInfo*/
+.courseContent > .main > #grid.view1 > .productCard > .info >.teacherInfo{
+    display: flex;
+    flex-wrap:wrap;
+    border-bottom:1px solid gray;
+    height: 40%;
+}
+.courseContent > .main > #grid.view1 > .productCard > .info >.teacherInfo>span{
+    width: 49%;
+    border: 1px solid black;
+}
+.courseContent > .main > #grid.view1 > .productCard > .info >.teacherInfo>div{
+    border: 1px solid blue;
+}
+
+/* PriceDetail*/
+
+.courseContent > .main > #grid.view1 > .productCard>.info >.detail{
+    display: flex;
+    flex-flow:row;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 30%;
+}
+
+.courseContent > .main > #grid.view1 > .productCard >.info >.detail>span{	
+   border:1px solid yellow;
+   height: 40px;
+}
+.courseContent > .main > #grid.view1 > .productCard >.info >.detail>.detailBt{
+	border-radius: 8px;
+	border:2px solid rgb(59, 8, 8);
+    background-color: blue;
+    height: 40px;
+}
+
+
+
+/*   view 2   */
+
+.courseContent > .main > #grid.view2{
+	display:flex;
+	flex-flow:column wrap;
+	gap:10px;
+}
+/* .courseContent > .main > #grid.view2 > .productCard:hover > .Img{
+	filter:blur(2px);
+}
+.courseContent > .main > #grid.view2 > .productCard:hover > .info{
+	top:110px;
+} */
+
+.courseContent > .main > #grid.view2 > .productCard{
+	width:100%;
+	/* flex-grow:1; */
+	background:#fff;
+	border-radius:48px;	
+    height: 216px;
+	/* font-size:10px; */
+	overflow:hidden;
+	position:relative;
+	/* height:auto; */
+	display:flex;
+    flex-flow: row;
+	/* justify-content:space-around; */
+}
+
+.courseContent > .main > #grid.view2 > .productCard >.Image{
+	transition:filter 0.5s;
+	width:30%;
+    padding: 5px;
+    /* height: 400px; */
+	border-radius:44px;
+	box-shadow:0 0 50px 1px #eee;
+}
+
+.courseContent > .main > #grid.view2 > .productCard > .info{
+	/* position:static; */
+	/* transition:top 0.5s; */
+    border: 1px solid red;
+    border-radius: 48px;
+	/* background:red; */
+	/* position:absolute; */
+	width:70%;
+    padding: 10px;
+	/* top:140px;	 */
+}
+
+.courseContent > .main > #grid.view2 >.productCard>.favorite{
+	position: absolute;
+    top: 25px;
+    /* background-color: red; */
+    right: 20px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid gray;
+}
+
+
+/* intro*/
+
+.courseContent > .main > #grid.view2 > .productCard > .info>.intro{
+    display: flex;
+    justify-content: start;
+    height: 20%;
+    
+}
+.courseContent > .main > #grid.view2 > .productCard > .info >.intro>.name{
+	border: 1px solid green;
+}
+.courseContent > .main > #grid.view2 > .productCard > .info >.intro>.star{
+	border: 1px solid green;
+    display: flex;
+    color: white;
+    place-items: center;
+    position: absolute;
+    top: 25px;
+    right: 230px;
+}
+.courseContent > .main > #grid.view2> .productCard > .info >.intro>.star>img{
+	border: 1px solid green;
+    width: 100%;
+}
+
+
+/* teacherInfo*/
+.courseContent > .main > #grid.view2 > .productCard > .info >.teacherInfo{
+    display: flex;
+    flex-wrap:wrap;
+    width: 50%;
+    border-bottom:1px solid gray;
+    height: 40%;
+}
+.courseContent > .main > #grid.view2 > .productCard > .info >.teacherInfo>span{
+    flex-grow: 1;
+    width: 49%;
+    border: 1px solid black;
+}
+.courseContent > .main > #grid.view2 > .productCard > .info >.teacherInfo>div{
+    flex-grow: 2;
+    border: 1px solid blue;
+}
+
+/* PriceDetail*/
+
+.courseContent > .main > #grid.view2 > .productCard>.info >.detail{
+    display: flex;
+    flex-flow:row;
+    justify-content: space-between;
+    align-items: center;
+    height: 30%;
+}
+
+.courseContent > .main > #grid.view2 > .productCard >.info >.detail>span{	
+   border:1px solid yellow;
+   height: 40px;
+}
+.courseContent > .main > #grid.view2 > .productCard >.info >.detail>.detailBt{
+	border-radius: 8px;
+	border:2px solid rgb(59, 8, 8);
+    background-color: blue;
+    height: 40px;
+}
+
+
+
+
+/* .courseContent.hide,
+#detail.hide,
+#publisher.hide,
+#writer.hide,
+#basket.hide{
+	display:none;
+} */

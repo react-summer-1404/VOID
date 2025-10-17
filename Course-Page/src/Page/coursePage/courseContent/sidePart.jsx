@@ -132,19 +132,19 @@ const sidePart =()=>{
           handleStyle={[
             {
               backgroundColor: "#a200ff",
-              border: "2px solid white",
+              border: "0 none",
               width: 16,
               height: 16,
               marginTop: -6,
-              boxShadow: "0 0 0 2px #a200ff40",
+              // boxShadow: "0 0 0 2px #a200ff40",
             },
             {
               backgroundColor: "#a200ff",
-              border: "2px solid white",
+              border: "0 none",
               width: 16,
               height: 16,
               marginTop: -6,
-              boxShadow: "0 0 0 2px #a200ff40",
+              // boxShadow: "0 0 0 2px #a200ff40",
             },
           ]}
           railStyle={{
@@ -155,17 +155,15 @@ const sidePart =()=>{
         />
       <div className="price-inputs">
         <div className="price-box">
-          <span className="label">از</span>
           <button className="dropdown">
-            {range[0].toLocaleString("fa-IR")} تومان
+            از{range[0].toLocaleString("fa-IR")} تومان 
             <span className="arrow">▼</span>
           </button>
         </div>
 
         <div className="price-box">
-          <span className="label">تا</span>
           <button className="dropdown">
-            {range[1].toLocaleString("fa-IR")} تومان
+            تا{range[1].toLocaleString("fa-IR")} تومان
             <span className="arrow">▼</span>
           </button>
         </div>

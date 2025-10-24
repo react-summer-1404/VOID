@@ -1,10 +1,9 @@
 import {createBrowserRouter} from "react-router-dom"
-import CoursePage from "../Page/coursePage/coursePage"
-import CourseContent from "../Page/coursePage/coursePagePart/courseContent"       
+import ContentPage from "../contentpage/contentPage"      
 
 const router = createBrowserRouter([
  
-    {path:"/",element:<CoursePage/>},
+    {path:"/",element:<ContentPage/>},
     
    
 ])

@@ -5,92 +5,94 @@
 	@apply  bg-[rgba(245,246,248,1)] flex justify-center gap-[15px] ;
 }
 
-.courseContent > .main {
+.main {
 	@apply  w-[clamp(700px,60%,1200px)] min-h-[1000px];
 }
 
-.courseContent > .main > .set {
+.main > .set {
 	@apply h-[50px] bg-white rounded-[5px] mb-[10px] flex justify-between items-center gap-5;
 }
 
 /* Sort Section */
-.courseContent > .main > .set > .sort {
+.main > .set > .sort {
 	@apply border border-[#ddd] rounded-[5px] p-[3px] leading-[25px] relative text-sm text-[#444] mr-[10px];
 }
 
-.courseContent > .main > .set > .sort:hover > ul {
+.main > .set > .sort:hover > ul {
 	@apply opacity-100 visible;
 }
 
-.courseContent > .main > .set > .sort > ul {
+.main > .set > .sort > ul {
 	@apply absolute top-[35px] left-0 z-[200] bg-white/95 shadow-[0_10px_15px_1px_#ddd] rounded-b-[7px] py-[5px] m-0 list-none text-[13px] text-center w-full invisible transition-all duration-300 opacity-0;
 }
 
-.courseContent > .main > .set > .sort > ul > li > label:hover {
+.main > .set > .sort > ul > li > label:hover {
 	@apply bg-[lightseagreen] text-white;
 }
 
-.courseContent > .main > .set > .sort > ul > li > label {
+.main > .set > .sort > ul > li > label {
 	@apply h-full rounded-[5px] mx-auto block w-[90%];
 }
 
-.courseContent > .main > .set > .sort > ul > li > input {
+.main > .set > .sort > ul > li > input {
 	@apply hidden;
 }
 
-.courseContent > .main > .set > .sort > ul > li > input:checked + label {
+.main > .set > .sort > ul > li > input:checked + label {
 	@apply bg-orange-500 text-white;
 }
 
 /* View Box */
-.courseContent > .main > .set > .viewBox {
+.main > .set > .viewBox {
 	@apply flex flex-row gap-[10px] ml-[10px];
 
 }
 
-.courseContent > .main > .set > .viewBox > .view1 {
+.main > .set > .viewBox > .view1 {
 	@apply border-0  bg-[#9B0EE1] rounded-[5px] h-[25px]  cursor-pointer shadow-[0_0_10px_#9B0EE140];
 }
-.courseContent > .main > .set > .viewBox > .view2 {
+.main > .set > .viewBox > .view2 {
 	@apply  border-0 rounded-[5px] h-[25px] relative cursor-pointer shadow-[0_0_10px_#9B0EE140];
 }
 
 
+
+
 /* Sidebar */
-.courseContent > .side {
+.side {
 	@apply w-[280px] rounded-[5px];
 }
 
-.courseContent > .side > .sideMaket {
+.side > .sideMaket {
 	@apply w-full bg-white rounded-[5px] py-[10px] text-[#555] flex flex-row flex-wrap;
 }
 
-.courseContent > .side > .sideMaket > .filterTitle {
+.side > .sideMaket > .filterTitle {
 	@apply w-[90%] font-medium text-xs px-[10px] pb-[15px] border-b border-[#eee] m-[10px] flex justify-between items-center;
 }
 
-.courseContent > .side > .sideMaket > .filterTitle > .filterNum {
+.side > .sideMaket > .filterTitle > .filterNum {
 	@apply text-[10px] font-bold;
 }
 
-.courseContent > .side > .sideMaket > .filterTitle > h2 {
+.side > .sideMaket > .filterTitle > h2 {
 	@apply font-medium text-xs;
 }
 
 /* Filter Category */
-.courseContent > .side > .sideMaket > .filter {
+.side > .sideMaket > .filter {
 	@apply rounded-[5px] p-[3px] w-[90%];
 }
 
-.courseContent > .side > .sideMaket > .filter > .catLabel {
+.side > .sideMaket > .filter > .catLabel {
 	@apply font-medium text-xs indent-[10px] p-[5px];
 }
 
-.courseContent > .side > .sideMaket > .filter > .category {
+.side > .sideMaket > .filter > .category {
 	@apply border border-[#ddd] rounded-[5px] p-[3px] leading-[25px] relative text-sm text-[#444] mr-[10px];
 }
 
-.courseContent > .side > .sideMaket > .filter > .category > .catName {
+.side > .sideMaket > .filter > .category > .catName {
 	@apply flex justify-between;
 }
 
@@ -102,24 +104,24 @@
 	@apply opacity-100 visible;
 }
 
-.courseContent > .side > .sideMaket > .filter > .category > ul > li > label:hover {
+.side > .sideMaket > .filter > .category > ul > li > label:hover {
 	@apply bg-[lightseagreen] text-white;
 }
 
-.courseContent > .side > .sideMaket > .filter > .category > ul > li > label {
+.side > .sideMaket > .filter > .category > ul > li > label {
 	@apply h-full rounded-[5px] mx-auto block w-[90%];
 }
 
-.courseContent > .side > .sideMaket > .filter > .category > ul > li > input {
+.side > .sideMaket > .filter > .category > ul > li > input {
 	@apply hidden;
 }
 
-.courseContent > .side > .sideMaket > .filter > .category > ul > li > input:checked + label {
+.side > .sideMaket > .filter > .category > ul > li > input:checked + label {
 	@apply bg-orange-500 text-white;
 }
 
 /* Filter Input */
-.courseContent > .side > .sideMaket > .filterInput > label {
+.side > .sideMaket > .filterInput > label {
 	@apply text-xs border border-black block;
 }
 
@@ -131,7 +133,7 @@
 /* Price Filter */
 .price-filter {
 	@apply  w-full  p-4 font-bold;
-	direction: rtl
+	/* direction: ltr */
 }
 
 .header {

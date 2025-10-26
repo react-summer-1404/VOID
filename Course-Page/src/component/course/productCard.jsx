@@ -11,7 +11,7 @@ import Vector from "../../assets/icon/Vector.png"
 const productCard = ({Id,price,like,name,teacher,category,sortBy,date,Img})=>{
 
 return(
- <div key={Id} className="productCard">
+ <div key={Id} className="productCard shadow-md shadow-purple-200 ">
 
  <img src={Image} className="Image"/>
  

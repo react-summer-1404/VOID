@@ -52,7 +52,7 @@ const courseContent = () => {
     //filter trun on/off
 
     const [filterBt,setFilterBt] = useState(false);
-    console.log(filterBt)
+    // console.log(filterBt)
 	
 //////////////////////////////////////////////////////////////
 // filter update
@@ -70,7 +70,7 @@ const courseContent = () => {
 ///////////////////////////////////////
 
   const [courseData,setCourseData] = useState([]);
-  console.log(courseData)
+  // console.log(courseData)
 
    // تعداد محصول در هر صفحه
      
@@ -97,7 +97,7 @@ const courseContent = () => {
 ///////////////////////////////////////////
 
 return(
- <div className="bg-[rgba(245,246,248,1)] flex  justify-center gap-[15px]">
+ <div className="  flex  justify-center gap-[15px]">
 
     <FilterSide 
 		 setFilters={setFilters}
@@ -112,12 +112,12 @@ return(
 		  />
     
      
-
+  {/* className="sm:w-[clamp(700px,60%,1200px)] lg:w-[clamp(800px,60%,1200px) xl:w-[clamp(850px,60%,1200px)]" */}
   <div className="sm:w-[clamp(700px,60%,1200px)] lg:w-[clamp(800px,60%,1200px) xl:w-[clamp(850px,60%,1200px)]">  
 
-    <div className="h-[50px] bg-white rounded-[5px] mb-[10px] flex justify-between items-center gap-5">
+    <div className=" shadow-md shadow-purple-200 h-[50px] bg-white rounded-[5px] mb-[10px] flex justify-between items-center gap-5">
 
-	<div className="group rounded-[5px] p-[3px] leading-[25px] relative text-sm text-[#444] mr-[10px]">  
+	<div className="group  rounded-[5px] p-[3px] leading-[25px] relative text-sm text-[#444] mr-[10px]">  
 
      
      {!filterBt &&<SortingBox
@@ -139,7 +139,7 @@ return(
 
 
 
-    <div className="flex flex-row gap-[10px] ml-[10px]">
+    <div className=" flex flex-row gap-[10px] ml-[10px]">
 	<div style={ViewBt} className={view === "view2" ? "bg-[#9B0EE1]" : " "}  onClick={()=>setview("view2")}><img src={view === "view2" ? View2v2 : View2}/></div>  
 	<div style={ViewBt} className={view === "view1" ? "bg-[#9B0EE1]" : " "}  onClick={()=>setview("view1")}><img src={view === "view1" ? View1 : View1v1}/></div>
     </div>

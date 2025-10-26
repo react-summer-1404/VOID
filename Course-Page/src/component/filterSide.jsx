@@ -82,9 +82,9 @@ const handleMaxChange = (e) => {
    
     return(
         
-         <div className={`sm:w-[20%] md:w-[40%] lg:w-[23%] xl:w-[20%] w-[80%] lg:block absolute lg:relative z-[10] rounded-[20px]
+  <div className={`sm:w-[20%] md:w-[40%] lg:w-[23%] xl:w-[20%] w-[80%] lg:block absolute lg:relative z-[10] rounded-[20px]
           ${filterBt ? "block top-[320px] right-[45px]" : "hidden"}`}>
-        <div className="w-full bg-white rounded-[20px] py-[10px] text-[#555] flex flex-row flex-wrap">
+  <div className=" shadow-md shadow-purple-200 w-full bg-white rounded-[20px] py-[10px] text-[#555] flex flex-row flex-wrap">
 
         <div className="w-[90%] font-medium text-xs px-[10px] pb-[15px] border-b border-[#eee] m-[10px] flex justify-between items-center"> 
 
@@ -258,7 +258,6 @@ const handleMaxChange = (e) => {
             از<input
            type="number"
            value={range[0]}
-           size={Math.max(range[0].length, 1)}
            onChange={handleMinChange}
            className="w-[75px] md:w-[60px] md:text-[10px] outline-0"
            /> تومان 

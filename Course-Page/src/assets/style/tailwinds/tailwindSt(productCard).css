@@ -96,7 +96,7 @@
 }
 
  #grid.view2 > .productCard > .info > .intro > .star {
-	@apply  gap-1 flex text-white items-center absolute top-[25px] right-[20%] md:right-[25%];
+	@apply  gap-1 flex text-white items-center absolute top-[25px] right-[20%] md:right-[28%];
 }
 
  #grid.view2 > .productCard > .info > .intro > .star > img {

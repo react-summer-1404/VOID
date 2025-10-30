@@ -78,6 +78,8 @@ const handleMaxChange = (e) => {
     setFilterNull(true);
      }; 
 
+     
+
   // console.log(range);
    
     return(

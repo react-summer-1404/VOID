@@ -68,11 +68,10 @@ const courseContent = () => {
   };
  
 ///////////////////////////////////////
-
   const [courseData,setCourseData] = useState([]);
   // console.log(courseData)
 
-   // تعداد محصول در هر صفحه
+     // تعداد محصول در هر صفحه
      
      const [currentPage, setCurrentPage] = useState(1);
      const itemsPerPage = 9;  
@@ -80,11 +79,23 @@ const courseContent = () => {
   //محسابه تعداد محصول در هر صفحه
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = courseData.slice(indexOfFirstItem, indexOfLastItem);
+  
+  // const currentItems = courseData.slice(indexOfFirstItem, indexOfLastItem);
 
-  // تعداد کل صفحات
-  const totalPages = Math.ceil(courseData.length / itemsPerPage);
-  //  console.log(totalPages);
+
+  // // تعداد کل صفحات
+  // const totalPages = Math.ceil(courseData.length / itemsPerPage);
+  // //  console.log(totalPages);
+
+  // چک کن که courseData آرایه باشه و پر باشه
+const currentItems = Array.isArray(courseData) && courseData.length > 0
+  ? courseData.slice(indexOfFirstItem, indexOfLastItem) 
+  : [];
+
+// تعداد کل صفحات
+const totalPages = Array.isArray(courseData) && courseData.length > 0
+  ? Math.ceil(courseData.length / itemsPerPage)
+  : 0;  
 
   // تابع برای تغییر صفحه
   const handlePageChange = (pageNumber) => {
@@ -92,12 +103,15 @@ const courseContent = () => {
     window.scrollTo({ top: 100, behavior:"smooth"});
   };
 
+  
   // console.log(currentPage)
 
 ///////////////////////////////////////////
 
 return(
  <div className="  flex  justify-center gap-[15px]">
+
+
 
     <FilterSide 
 		 setFilters={setFilters}

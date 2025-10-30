@@ -3,7 +3,7 @@ const courseFooter=()=>{
 
     return(
           <>
-          <div style={{width:"100%",height:"100px"}}></div>
+          <div className="w-full h-[100px] bg-[gray]"></div>
           </>
     )
 }

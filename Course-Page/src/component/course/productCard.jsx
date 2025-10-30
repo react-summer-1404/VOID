@@ -1,4 +1,5 @@
 import "../../assets/style/tailwinds/tailwindSt(productCard).css"
+import {useNavigate} from "react-router-dom"
 
 import Image from "../../assets/cardImg/cover1.png"
 
@@ -8,10 +9,15 @@ import Education from "../../assets/icon/Education.png"
 import Calender from "../../assets/icon/Calender.png"
 import Vector from "../../assets/icon/Vector.png"
 
-const productCard = ({Id,price,like,name,teacher,category,sortBy,date,Img})=>{
+const productCard = ({id,price,like,name,teacher,category,sortBy,date,Img})=>{
+
+ const navigate = useNavigate();
+    const productDetailHandler = ()=>{
+       navigate(`/contentPage/courseDetail/${id}`)
+    }
 
 return(
- <div key={Id} className="productCard shadow-md shadow-purple-200 ">
+ <div key={id} className="productCard shadow-md shadow-purple-200 ">
 
  <img src={Image} className="Image"/>
  
@@ -37,7 +43,7 @@ return(
 
         <div className="detail">
         <span className="price">{price}<p className="text-purple-500">تومان</p></span>
-        <button className="detailBt">مشاهده دوره</button>       
+        <button onClick={productDetailHandler} className="detailBt">مشاهده دوره</button>       
        </div> 
 
    </div>

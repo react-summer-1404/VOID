@@ -200,6 +200,7 @@
 .catBox.show{
 	opacity:1;
 	visibility:visible;
+
 }
 
 .courseContent > .side >.sideMaket> .filter > .category > ul > li > label:hover{

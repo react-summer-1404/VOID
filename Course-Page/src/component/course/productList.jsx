@@ -1,28 +1,30 @@
 import ProductCard from "./productCard"
 import {useState,useEffect} from "react"
+import {useParams} from "react-router-dom"
 import axios from "axios"
 
 const productList=({filters,filterNull,range,currentItems,setCourseData})=>{
 
 const[Product,setProduct] = useState([]);
-
-const fetchProduct = async ()=>{
-  try{  
-    const response = await axios.get("https://sepehracademy.liara.run/Home/GetCoursesWithPagination?PageNumber=1&RowsOfPage=10&SortingCol=Active&SortType=DESC&TechCount=0");
-    const data = await response.data.courseFilterDtos;
-    setProduct(data);
-    // console.log("data",data);
-
-  }finally{
+const {id} = useParams();
+  
+      // console.log("Product:",Product);
+      useEffect( ()=>{
+        const fetchProduct = async ()=>{
+          try{  
+            const response = await axios.get("https://sepehracademy.liara.run/Home/GetCoursesWithPagination?PageNumber=1&RowsOfPage=10&SortingCol=Active&SortType=DESC&TechCount=0");
+            const data = await response.data.courseFilterDtos;
+            setProduct(data);
+            // console.log("data",data);
+        
+          }catch(error){
+           console.error('خطا در دریافت داده:', error);
+          }
+         }
+        
+        fetchProduct()
+      },[]);
     
-  }
- }
-
-  // console.log("Product:",Product);
-  useEffect( ()=>{
-    fetchProduct()
-  },[]);
-
 
     const mockCourse = [
       {id : 1 , name : "ریکت" ,level: 'مقدماتی' ,like: 20,date:"2025-10-01",category: 'دوره ریکت',sortBy:"جدید ترین", price : 50000000,teacher: 'استاد میثم'},
@@ -119,11 +121,17 @@ const fetchProduct = async ()=>{
 
    useEffect(()=>{
     setCourseData(FilteredCourse);
-   },[filters,Product])
+   },[filters,Product,id]);
+    
+   
+  // useEffect(()=>{
+  //    setCourseData(FilteredCourse)
+  //  },[filters,Product])
+
 
     return(
           <>
-          {currentItems.map((card)=>(
+         {!id && currentItems.map((card)=>(
             <ProductCard
             //  key={Card.id}
             //  Id = {Card.id}
@@ -137,17 +145,36 @@ const fetchProduct = async ()=>{
 
             key={card.courseId}
             price={card.cost}
-            Id={card.courseId}
+            id={card.courseId}
             name={card.title}
             like={card.likeCount}
             category={card.levelName}
             teacher={card.teacherName}
             Img={card.imageAddress || card.tumbImageAddress}
             date={card.startTime}
-
-             
           />
         ))}
+               
+
+         {/* {id && (
+                 Product.map((relatedCard) => (
+                   <ProductCard
+                      key={relatedCard.courseId}
+                      price={relatedCard.cost}
+                      id={relatedCard.courseId}
+                      name={relatedCard.title}
+                      like={relatedCard.likeCount}
+                      category={relatedCard.levelName}
+                      teacher={relatedCard.teacherName}
+                      Img={relatedCard.imageAddress || relatedCard.tumbImageAddress}
+                      date={relatedCard.startTime}
+                   />
+                 ))
+               )} */}
+
+
+
+
            </>
 
     )

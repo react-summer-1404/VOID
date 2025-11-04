@@ -1,0 +1,28 @@
+/* برای Chrome، Edge و Safari */
+.my-scroll::-webkit-scrollbar {
+  width: 8px; /* ضخامت اسکرول عمودی */
+  height: 8px; /* ضخامت اسکرول افقی */
+}
+
+/* رنگ پس‌زمینه نوار اسکرول */
+.my-scroll::-webkit-scrollbar-track {
+  background: #1a1a1a; /* رنگ پس‌زمینه (مشکی تیره) */
+  border-radius: 10px;
+}
+
+/* رنگ قسمت متحرک (thumb) */
+.my-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #888, #555);
+  border-radius: 10px;
+}
+
+/* هنگام hover */
+.my-scroll::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* برای Firefox */
+.my-scroll {
+  scrollbar-color: #555 #1a1a1a; /* thumb و track */
+  scrollbar-width: thin; /* نازک‌ترش کن */
+}

@@ -5,25 +5,26 @@ import axios from "axios"
 
 const productList=({filters,filterNull,range,currentItems,setCourseData})=>{
 
-const[Product,setProduct] = useState([]);
-const {id} = useParams();
+// const[Product,setProduct] = useState([]);
+// const {id} = useParams();
   
-      // console.log("Product:",Product);
-      useEffect( ()=>{
-        const fetchProduct = async ()=>{
-          try{  
-            const response = await axios.get("https://sepehracademy.liara.run/Home/GetCoursesWithPagination?PageNumber=1&RowsOfPage=10&SortingCol=Active&SortType=DESC&TechCount=0");
-            const data = await response.data.courseFilterDtos;
-            setProduct(data);
-            // console.log("data",data);
+//       // console.log("Product:",Product);
+//       useEffect( ()=>{
+//         const fetchProduct = async ()=>{
+//           try{  
+//             const response = await axios.get("https://sepehracademy.liara.run/Home/GetCoursesWithPagination?PageNumber=1&RowsOfPage=10&SortingCol=active&SortType=desc&TechCount=0");
+//         const data = await response.data.courseFilterDtos;
+//             setProduct(data);
+//             // console.log("data",data);
         
-          }catch(error){
-           console.error('خطا در دریافت داده:', error);
-          }
-         }
+//           }catch(error){
+//            console.error('خطا در دریافت داده:', error);
+//           }
+//          }
         
-        fetchProduct()
-      },[]);
+//         fetchProduct()
+//       },[]);
+
     
 
     const mockCourse = [
@@ -123,15 +124,10 @@ const {id} = useParams();
     setCourseData(FilteredCourse);
    },[filters,Product,id]);
     
-   
-  // useEffect(()=>{
-  //    setCourseData(FilteredCourse)
-  //  },[filters,Product])
-
 
     return(
           <>
-         {!id && currentItems.map((card)=>(
+         {currentItems.map((card)=>(
             <ProductCard
             //  key={Card.id}
             //  Id = {Card.id}
@@ -154,26 +150,9 @@ const {id} = useParams();
             date={card.startTime}
           />
         ))}
+
+        <div></div>
                
-
-         {/* {id && (
-                 Product.map((relatedCard) => (
-                   <ProductCard
-                      key={relatedCard.courseId}
-                      price={relatedCard.cost}
-                      id={relatedCard.courseId}
-                      name={relatedCard.title}
-                      like={relatedCard.likeCount}
-                      category={relatedCard.levelName}
-                      teacher={relatedCard.teacherName}
-                      Img={relatedCard.imageAddress || relatedCard.tumbImageAddress}
-                      date={relatedCard.startTime}
-                   />
-                 ))
-               )} */}
-
-
-
 
            </>
 

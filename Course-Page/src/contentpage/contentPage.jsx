@@ -7,6 +7,7 @@ import "../assets/style/tailwinds/tailwindSt(content).css"
 import CourseContent from "./coursePage/courseContent.jsx"
 import NewsContent from "./newsPage/newsContent.jsx"
 import CourseDetail from "./coursePage/courseDetail.jsx"
+import TeacherContent from "./teacherPage/teacherContent.jsx"
 
 import Squre2 from "../assets/back/squre2.png"
 import Squre3 from "../assets/back/squre3.png"
@@ -15,19 +16,22 @@ import {Link,Outlet,useParams} from "react-router-dom"
 
 
 const coursePage = ()=>{
-
+ 
+    const[nightMode,setNightMode] = useState(false);
 
     return(
-        <div>
-            <Link to={"/contentPage/courseContent"}><button className="absolute top-[300px] left-[10px]">go</button></Link>
-            <Link to={"/contentPage/courseDetail/:id"}><button className="absolute top-[300px] left-[50px]">go</button></Link>
-            <img src={Squre2} className="absolute top-[500px] left-[0]"/>
-            <img src={Squre3} className="absolute top-[800px] right-[0]"/>
-        <QuickAction/>
+        <div className={`${nightMode ? "bg-[black]/100": "bg-[#F5F5F5]"}`}>
+
+            <img src={Squre2} className="absolute  top-[500px] left-[0]"/>
+            <img src={Squre3} className="absolute  top-[800px] right-[0]"/>
+        <QuickAction
+         setNightMode={setNightMode}
+          nightMode={nightMode}
+         />
         <Header/>
          <div>
-            <Outlet/>
-         </div>
+            <Outlet setNightMode={setNightMode} nightMode={nightMode}/>
+         </div >
         <Footer/>
         </div>
     )

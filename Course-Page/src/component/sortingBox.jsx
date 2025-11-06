@@ -18,8 +18,9 @@ const Sorting = ({filters,filterBt,setFilters, updateActiveFilters})=>{
     return(
         <div className={`sort relative lg:block ${filterBt ? "":"hidden"}`}>
          <div
+          className="border border-gray-300 rounded-lg p-2 text-sm text-gray-700 cursor-pointer flex justify-between items-center hover:bg-gray-50"
            onClick={() => setShowSort(!showSort)}
-           className="border border-gray-300 rounded-lg p-2 text-sm text-gray-700 cursor-pointer flex justify-between items-center hover:bg-gray-50"
+           
          >
            <span>{  filters.sortBy || 'مرتب سازی بر اساس'}</span>
            <span className="text-xs">▼</span>

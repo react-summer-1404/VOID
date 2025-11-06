@@ -1,28 +1,28 @@
-import {useState} from "react"
+import {useState,useEffect} from "react"
 import useToggle from "../hook/useToggle"
 import Slider from "rc-slider"
 import "rc-slider/assets/index.css";
 import "../assets/style/tailwinds/tailwindSt(content).css"
 import SortingBox from "../component/sortingBox"
 
-const sidePart =({setFilters,filters,range,setRange,activeFilters,setFilterNull,setActiveFilters,updateActiveFilters,filterBt})=>{
-
+const sidePart =({filterBt,Product,setCourseData,setFilters,filters,range,setRange,activeFilters,setFilterNull,setActiveFilters,updateActiveFilters,})=>{
+  
   const [showCategories, setShowCategories] = useState(false);
   const [showCourseLevel, setShowCourseLevel] = useState(false);
   const [showTeachers, setShowTeachers] = useState(false);
- 
 
+ 
   const categories = [
-    { id: 1, name: 'دوره ریکت'},
-    { id: 2, name: 'UX دوره ' },
-    { id: 3, name: 'دوره بک‌اند' },
-    { id: 4, name: 'دوره بحر'}
+    { id: 1,describe:"react" ,name: 'دوره ریکت'},
+    { id: 2,describe:"ux" ,name: 'UX دوره ' },
+    { id: 3,describe:"backend" ,name: 'دوره بک‌اند' },
+    { id: 4,describe:"bahr" ,name: 'دوره بحر'}
   ];
 
   const courseLevel = [
-    {id : 1 ,name :'مقدماتی'},
-     {id : 2 ,name:'متوسط'},
-      {id : 3 ,name:'پیشرفته'}
+    {id : 1 ,LvId:"1" ,name :'مقدماتی'},
+     {id : 2 ,LvId:"2",name:'متوسط'},
+      {id : 3 ,LvId:"3",name:'پیشرفته'}
   ];
   const teachers = [
     {id : 1 , name:'استاد میثم'}, 
@@ -78,9 +78,49 @@ const handleMaxChange = (e) => {
     setFilterNull(true);
      }; 
 
-     
+    
 
-  // console.log(range);
+///////////////////////////////////////
+ //sorting & filtering function     
+    const SortCourse = [...Product].sort((a, b) => {
+      if (filters.sortBy === "گران ترین") return b.cost - a.cost;
+      if (filters.sortBy === "ارزان ترین") return a.cost - b.cost;
+      if (filters.sortBy === "محبوب ترین") return b.likeCount - a.likeCount;
+      if (filters.sortBy === "جدید ترین") return new Date(b.date) - new Date(a.date);
+      return 0;
+    });
+       
+     const FilteredCourse = SortCourse.filter((el) => {
+     
+     const matchCategory = 
+       !filters.category || el.describe === filters.category; 
+   
+     const matchLevel = 
+       !filters.courseLevel || el.courseLvlId === filters.courseLevel;
+   
+     const matchTeacher = 
+       !filters.teacher || el.teacherName === filters.teacher;
+   
+     // const matchSort = 
+     //   !filters.sortBy || el.sortBy === filters.sortBy;
+   
+     const matchPrice = 
+       el.cost >= filters.priceRange[0] && 
+       el.cost <= filters.priceRange[1];
+   
+     return (
+       matchCategory &&
+       matchLevel &&
+       matchTeacher &&
+       // matchSort &&
+       matchPrice
+     );
+   });
+     useEffect(()=>{
+         setCourseData(FilteredCourse);
+        },[filters,Product]);
+
+//////////////////////////////////////////////////
    
     return(
         
@@ -99,7 +139,7 @@ const handleMaxChange = (e) => {
 			
 		</div>	
 
-       {/* Category Filter */}
+    {/*category*/}
      <div className="rounded-[5px] p-[3px] w-[95%] pr-2">
        <label className="text-xs font-medium text-gray-700 block mb-3 pr-2">
          دسته‌بندی
@@ -107,8 +147,9 @@ const handleMaxChange = (e) => {
        
        <div className="relative">
          <div
+         className="border border-gray-300 rounded-lg p-2 text-sm text-gray-700 cursor-pointer flex justify-between items-center hover:bg-gray-50"
            onClick={() => setShowCategories(!showCategories)}
-           className="border border-gray-300 rounded-lg p-2 text-sm text-gray-700 cursor-pointer flex justify-between items-center hover:bg-gray-50"
+           
          >
            <span>{filters.category || 'انتخاب کنید'}</span>
            <span className="text-xs">▼</span>
@@ -123,7 +164,7 @@ const handleMaxChange = (e) => {
                      filters.category === cat.name ? '!bg-orange-500 !text-white' : ''
                    }`}
                    onClick={() => {
-                     handleCategoryChange(cat.name);
+                     handleCategoryChange(cat.describe);
                      setShowCategories(false);
                    }}
                  >
@@ -137,7 +178,7 @@ const handleMaxChange = (e) => {
        </div>
      </div>
 
-     {/* courseLevel Filter */}
+     {/* courseLevel*/}
 
      <div className="rounded-[5px] p-[3px] w-[95%] pr-2">
        <label className="text-xs font-medium text-gray-700 block mb-3 pr-2">
@@ -146,8 +187,9 @@ const handleMaxChange = (e) => {
        
        <div className="relative">
          <div
+          className="border border-gray-300 rounded-lg p-2 text-sm text-gray-700 cursor-pointer flex justify-between items-center hover:bg-gray-50"
            onClick={() => setShowCourseLevel(!showCourseLevel)}
-           className="border border-gray-300 rounded-lg p-2 text-sm text-gray-700 cursor-pointer flex justify-between items-center hover:bg-gray-50"
+          
          >
            <span>{filters.courseLevel || 'انتخاب کنید'}</span>
            <span className="text-xs">▼</span>
@@ -162,7 +204,7 @@ const handleMaxChange = (e) => {
                      filters.courseLevel === lvl.name ? '!bg-orange-500 !text-white' : ''
                    }`}
                    onClick={() => {
-                    handleCourseLevelChange(lvl.name);
+                    handleCourseLevelChange(lvl.LvId);
                      setShowCourseLevel(false);
                    }}
                  >
@@ -176,7 +218,7 @@ const handleMaxChange = (e) => {
        </div>
      </div>
 
-      {/* teacher Filter */}
+      {/* teacher*/}
 
      <div className="rounded-[5px] p-[3px] w-[95%] pr-2">
        <label className="text-xs font-medium text-gray-700 block mb-3 pr-2">
@@ -185,8 +227,9 @@ const handleMaxChange = (e) => {
        
        <div className="relative">
          <div
+          className="border border-gray-300 rounded-lg p-2 text-sm text-gray-700 cursor-pointer flex justify-between items-center hover:bg-gray-50"
            onClick={() => setShowTeachers(!showTeachers)}
-           className="border border-gray-300 rounded-lg p-2 text-sm text-gray-700 cursor-pointer flex justify-between items-center hover:bg-gray-50"
+          
          >
            <span>{filters.teacher || 'انتخاب کنید'}</span>
            <span className="text-xs">▼</span>
@@ -216,7 +259,7 @@ const handleMaxChange = (e) => {
      </div>
 	
 
-			 {/*price Filter*/}
+			 {/*priceRange*/}
             <div className="w-full font-[fa-IR] w-[95%] p-5">
       <div className="text-[#00897b] font-semibold text-sm">
         <span>قیمت</span>
@@ -255,8 +298,8 @@ const handleMaxChange = (e) => {
         />
       <div className="flex flex-row justify-between w-[full] font-bold">
         <div className="flex flex-row w-[49%] justify-end ">
-           <div onClick={()=> setRange(["",range[1]])}
-            className="group hover:bg-[#e8e8e8]  bg-[#f3f3f3] border border-[#d1d1d1] rounded-[10px] w-[full] h-10 p-1  text-[12px] flex place-items-center cursor-pointer text-[#333]">
+           <div className="group hover:bg-[#e8e8e8]  bg-[#f3f3f3] border border-[#d1d1d1] rounded-[10px] w-[full] h-10 p-1  text-[12px] flex place-items-center cursor-pointer text-[#333]"
+           onClick={()=> setRange(["",range[1]])}>
             از<input
            type="number"
            value={range[0]}
@@ -269,8 +312,8 @@ const handleMaxChange = (e) => {
         </div>
 
         <div className="flex flex-row w-[49%]">
-          <div  onClick={()=> setRange([range[0],""])}
-          className="group hover:bg-[#e8e8e8]  bg-[#f3f3f3] border border-[#d1d1d1] rounded-[10px] w-[full]  h-10 p-1 text-[13px] flex place-items-center cursor-pointer text-[#333]">
+          <div  className="group hover:bg-[#e8e8e8]  bg-[#f3f3f3] border border-[#d1d1d1] rounded-[10px] w-[full]  h-10 p-1 text-[13px] flex place-items-center cursor-pointer text-[#333]"
+          onClick={()=> setRange([range[0],""])}>
             تا<input
            type="number"
            value={range[1]}
@@ -286,7 +329,7 @@ const handleMaxChange = (e) => {
 
     </div>
 
-    {/*sorting*/}
+    {/*sortBy*/}
      <div className="sorting w-[90%] block md:hidden " >
        <label className="text-xs font-medium text-gray-700 block mb-3 pr-2">
          مرتب سازی

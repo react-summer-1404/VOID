@@ -1,19 +1,15 @@
-import {useState , useEffect} from "react";
+import {useState,useEffect} from "react"
+import axios from "axios"
 import ProductList from "../../component/course/productList.jsx"
+import ProductCard from "../../component/course/productCard.jsx"
 import FilterSide from "../../component/filterSide.jsx"
 import SortingBox from "../../component/sortingBox.jsx"
-import SideMaket from "../../component/side(maket).jsx"
-
-// import "../../assets/style/tailwinds/tailwindSt(content).css"
-// import "../../assets/style/tailwinds/tailwindSt(productCard).css"
-
-
 import View1 from "../../assets/icon/view1.png"
 import View1v1 from "../../assets/icon/view1.v1.png"
 import View2 from "../../assets/icon/view2.png"
 import View2v2 from "../../assets/icon/view2.v2.png"
-
 import FilterIco from "../../assets/icon/filter.png"
+
 
 
 const courseContent = () => {
@@ -26,8 +22,32 @@ const courseContent = () => {
        cursor: 'pointer',
        boxShadow: '0 0 10px #9B0EE140'
     };
-   
-	////////////////////////////////////////////////
+
+  ////////////////////////////////////////////////////////
+  //api
+  const[Product,setProduct] = useState([]);
+  //  const {id} = useParams();
+  
+      console.log("Product:",Product);
+
+      useEffect(()=>{
+        const fetchProduct = async ()=>{
+          try{  
+        const response = await axios.get("https://sepehracademy.liara.run/Home/GetCoursesWithPagination?PageNumber=1&RowsOfPage=10&SortingCol=active&SortType=desc&TechCount=0");
+        const data = await response.data.courseFilterDtos;
+            setProduct(data);
+            // console.log("data",data);
+        
+          }catch(error){
+           console.error('خطا در دریافت داده:', error);
+          }
+         }
+        
+        fetchProduct()
+      },[]);  
+
+
+        ////////////////////////////////////////////////
    ////filter data
 	 const [range, setRange] = useState([0, 100000000]);
 	 const [filterNull,setFilterNull] = useState(true);
@@ -49,12 +69,8 @@ const courseContent = () => {
        }, [range]);
 
   /////////////////////////////////////////////
-    //filter trun on/off
 
-    const [filterBt,setFilterBt] = useState(false);
-    // console.log(filterBt)
-	
-//////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////
 // filter update
 	  const updateActiveFilters = (currentFilters) => {
       let count = 0;
@@ -66,6 +82,12 @@ const courseContent = () => {
     if(count === 0) setFilterNull(true);
     setActiveFilters(count);
   };
+
+    //filter trun on/off
+
+    const [filterBt,setFilterBt] = useState(false);
+    // console.log(filterBt)
+	
  
 ///////////////////////////////////////
   const [courseData,setCourseData] = useState([]);
@@ -74,19 +96,12 @@ const courseContent = () => {
      // تعداد محصول در هر صفحه
      
      const [currentPage, setCurrentPage] = useState(1);
-     const itemsPerPage = 9;  
+     const itemsPerPage = 3;  
    
   //محسابه تعداد محصول در هر صفحه
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   
-  // const currentItems = courseData.slice(indexOfFirstItem, indexOfLastItem);
-
-
-  // // تعداد کل صفحات
-  // const totalPages = Math.ceil(courseData.length / itemsPerPage);
-  // //  console.log(totalPages);
-
   // چک کن که courseData آرایه باشه و پر باشه
 const currentItems = Array.isArray(courseData) && courseData.length > 0
   ? courseData.slice(indexOfFirstItem, indexOfLastItem) 
@@ -103,13 +118,12 @@ const totalPages = Array.isArray(courseData) && courseData.length > 0
     window.scrollTo({ top: 100, behavior:"smooth"});
   };
 
-  
-  // console.log(currentPage)
 
 ///////////////////////////////////////////
 
+
 return(
- <div className="  flex  justify-center gap-[15px]">
+ <div className="   flex  justify-center pb-50 gap-[20px]">
 
 
 
@@ -119,6 +133,9 @@ return(
 		 setRange={setRange}
 		 range={range}
 		 setFilterNull={setFilterNull}
+     filterNull={filterNull}
+     Product={Product}
+    setCourseData={setCourseData}
 		 updateActiveFilters={updateActiveFilters}
 		 setActiveFilters={setActiveFilters}
 		 activeFilters={activeFilters}
@@ -127,7 +144,8 @@ return(
     
      
   {/* className="sm:w-[clamp(700px,60%,1200px)] lg:w-[clamp(800px,60%,1200px) xl:w-[clamp(850px,60%,1200px)]" */}
-  <div className="sm:w-[clamp(700px,60%,1200px)] lg:w-[clamp(800px,60%,1200px) xl:w-[clamp(850px,60%,1200px)]">  
+
+  <div className=" lg:w-[960px] md:w-[clamp(700px,60%,1200px)]  min-h-[1200px]">  
 
     <div className=" shadow-md shadow-purple-200 h-[50px] bg-white rounded-[5px] mb-[10px] flex justify-between items-center gap-5">
 
@@ -161,17 +179,42 @@ return(
 
     <div id="grid" className={view}>
 
-    	<ProductList
+    	{/* <ProductList
 		   filters={filters}
 		   filterNull={filterNull}
 		   range={range}
        courseData={courseData}
        setCourseData={setCourseData}
        currentItems={currentItems}
-		/>
+		/> */}
 
-       {/* دکمه‌های صفحه‌بندی */}
-      <div className=" w-full p-5 flex justify-center mt-6 space-x-2">
+
+    {currentItems.map((card)=>(
+            <ProductCard
+            //  key={Card.id}
+            //  Id = {Card.id}
+            //  name = {Card.name}
+            //  category={Card.category}
+            //  sortBy={Card.sortBy}
+            //  price={Card.price}
+            //  teacher={Card.teacher}
+            //  like={Card.like}
+            //  date={Card.date}
+
+            key={card.courseId}
+            price={card.cost}
+            id={card.courseId}
+            name={card.title}
+            like={Math.round(card.courseRate.avg/card.courseRate.count ? card.courseRate.avg/card.courseRate.count : 0)}
+            category={card.levelName}
+            teacher={card.teacherName}
+            Img={card.imageAddress || card.tumbImageAddress}
+            date={card.startTime}
+          />
+        ))}
+
+       
+      <div className="pagebuttons w-full p-5 flex justify-center mt-6 space-x-2">
 
         <button type="submit" onClick={()=>currentPage !=1 && setCurrentPage(currentPage -1)}
           className={` w-8 h-8 text-center  rounded ${

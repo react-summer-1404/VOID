@@ -14,12 +14,13 @@ const productCard = ({id,price,like,name,teacher,category,sortBy,date,Img})=>{
  const navigate = useNavigate();
     const productDetailHandler = ()=>{
        navigate(`/contentPage/courseDetail/${id}`)
+       window.location.reload();
     }
 
 return(
  <div key={id} className="productCard shadow-md shadow-purple-200 ">
 
- <img src={Image} className="Image"/>
+ <img src={Img} className="Image"/>
  
  <span className="favorite">
     <img className=" w-[18px] h-[18px] m-[auto]" src={Favorite}/>

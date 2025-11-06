@@ -1,10 +1,340 @@
-import NewsList from "../../component/news/newsList"
+import {useState,useEffect} from "react"
+import axios from "axios"
+import NewsCard from "../../component/news/newsCard.jsx"
+import SortingBox from "../../component/sortingBox.jsx"
+import View1 from "../../assets/icon/view1.png"
+import View1v1 from "../../assets/icon/view1.v1.png"
+import View2 from "../../assets/icon/view2.png"
+import View2v2 from "../../assets/icon/view2.v2.png"
+import FilterIco from "../../assets/icon/filter.png"
 
-const newsContent = ()=>{
-    return(
-        <>
-        <NewsList/>
-        </>
+
+const newsContent = () => {
+   const[view,setview] = useState("view1");
+
+	const ViewBt = {
+       border: '0',
+       borderRadius: '5px',
+       height: '25px',
+       cursor: 'pointer',
+       boxShadow: '0 0 10px #9B0EE140'
+    };
+
+  ////////////////////////////////////////////////////////
+  //api
+  const[News,setNews] = useState([]);
+  //  const {id} = useParams();
+  
+      // console.log("News:",News);
+
+      useEffect(()=>{
+        const fetchNews = async ()=>{
+          try{  
+        const response = await axios.get("https://sepehracademy.liara.run/News?PageNumber=1&RowsOfPage=10&SortingCol=InsertDate&SortType=DESC");
+        const data = await response.data.news;
+            setNews(data);
+            // console.log("data",data);
+        
+          }catch(error){
+           console.error('خطا در دریافت داده:', error);
+          }
+         }
+        
+        fetchNews()
+      },[]);  
+
+
+        ////////////////////////////////////////////////
+   ////filter data
+	 const [filterNull,setFilterNull] = useState(true);
+	  const [activeFilters, setActiveFilters] = useState(0);
+    
+    const [filters, setFilters] = useState({
+    category: '',
+	  sortBy:'',
+     });
+
+      const [showCategories, setShowCategories] = useState(false);
+
+  const categories = [
+    { id: 1,describe:"react" ,name: 'دوره ریکت'},
+    { id: 2,describe:"ux" ,name: 'UX دوره ' },
+    { id: 3,describe:"backend" ,name: 'دوره بک‌اند' },
+    { id: 4,describe:"bahr" ,name: 'دوره بحر'}
+  ];
+
+   const handleCategoryChange = (category) => {
+    const newCategory = filters.category === category ? '' : category;
+    setFilters({ ...filters, category: newCategory });
+    updateActiveFilters({ ...filters, category: newCategory });
+  };
+
+  const resetFilters = () => {
+    setFilters({
+      category: '',
+   	  sortBy:'',
+      });
+      setRange([0, 100000000]);
+     setActiveFilters(0);
+     setFilterNull(true);
+     }; 
+
+    
+
+///////////////////////////////////////
+ //sorting & filtering function     
+    const SortCourse = [...News].sort((a, b) => {
+      if (filters.sortBy === "گران ترین") return b.cost - a.cost;
+      if (filters.sortBy === "ارزان ترین") return a.cost - b.cost;
+      if (filters.sortBy === "محبوب ترین") return b.likeCount - a.likeCount;
+      if (filters.sortBy === "جدید ترین") return new Date(b.date) - new Date(a.date);
+      return 0;
+    });
+       
+     const FilteredCourse = SortCourse.filter((el) => {
+     
+     const matchCategory = 
+       !filters.category || el.describe === filters.category; 
+     return (
+       matchCategory
+       );
+   });
+    
+  /////////////////////////////////////////////
+
+  //////////////////////////////////////////////////////////////
+// filter update
+	  const updateActiveFilters = (currentFilters) => {
+      let count = 0;
+      if (currentFilters.category) count++, setFilterNull(false);  
+    if(currentFilters.sortBy) count++ , setFilterNull(false);
+    if(count === 0) setFilterNull(true);
+    setActiveFilters(count);
+  };
+
+    //filter trun on/off
+
+    const [filterBt,setFilterBt] = useState(false);
+    // console.log(filterBt)
+	
+ 
+///////////////////////////////////////
+  // console.log(courseData)
+
+     // تعداد محصول در هر صفحه
+     
+     const [currentPage, setCurrentPage] = useState(1);
+     const itemsPerPage = 5;  
+   
+  //محسابه تعداد محصول در هر صفحه
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  
+  // چک کن که courseData آرایه باشه و پر باشه
+const currentItems = Array.isArray(FilteredCourse) && FilteredCourse.length > 0
+  ? FilteredCourse.slice(indexOfFirstItem, indexOfLastItem) 
+  : [];
+
+// تعداد کل صفحات
+const totalPages = Array.isArray(FilteredCourse) && FilteredCourse.length > 0
+  ? Math.ceil(FilteredCourse.length / itemsPerPage)
+  : 0;  
+
+  // تابع برای تغییر صفحه
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 100, behavior:"smooth"});
+  };
+
+
+///////////////////////////////////////////
+
+
+return(
+ <div className=" flex  justify-center pb-50 gap-[20px]">
+
+                     
+    <div className={`sm:w-[20%] md:w-[40%] lg:w-[23%] xl:w-[20%] w-[80%] lg:block absolute lg:relative z-[10] rounded-[20px]
+        ${filterBt ? "block top-[320px] right-[45px]" : "hidden"}`}>
+    <div className=" shadow-md shadow-purple-200 w-full bg-white rounded-[20px] py-[10px] text-[#555] flex flex-row flex-wrap">
+
+     <div className="w-[90%] font-medium text-xs px-[10px] pb-[15px] border-b border-[#eee] m-[10px] flex justify-between items-center"> 
+
+	<h2 className="text-[#9B0EE1]"> فیلتر  </h2>
+	<span className="transition text-[10px] font-bold cursor-pointer hover:!text-green hover:scale-[1.1]"
+     onClick={resetFilters}
+      >
+        حذف همه‌ی فیلتر ها({activeFilters})
+        </span>
+			
+		</div>	
+
+    {/*category*/}
+     <div className=" font-medium  rounded-[5px] p-[3px] w-[95%] pr-2">
+       <label className="text-xs font-medium text-gray-700 block mb-3 pr-2">
+         دسته‌بندی
+       </label>
+       
+       <div className="relative">
+         <div
+         className="border border-gray-300 rounded-lg p-2 text-sm text-gray-700 cursor-pointer flex justify-between items-center hover:bg-gray-50"
+           onClick={() => setShowCategories(!showCategories)}
+           
+         >
+           <span>{filters.category || 'انتخاب کنید'}</span>
+           <span className="text-xs">▼</span>
+         </div>
+         
+         {showCategories && (
+           <ul className="absolute top-full left-0 w-full mt-1 bg-white shadow-lg rounded-b-lg z-50 border border-gray-200">
+             {categories.map((cat) => (
+               <li key={cat.id}>
+                 <label
+                   className={`block px-4 py-2 text-sm cursor-pointer hover:bg-teal-500 hover:text-white ${
+                     filters.category === cat.name ? '!bg-orange-500 !text-white' : ''
+                   }`}
+                   onClick={() => {
+                     handleCategoryChange(cat.describe);
+                     setShowCategories(false);
+                   }}
+                 >
+                   {cat.name}
+                 </label>
+               </li>
+             ))}
+           </ul>
+         )}
+         
+       </div>
+     </div>
+
+        <div className="w-[95%] mr-2 mb-2 mt-2">
+    
+        <h2 className=" text-xs mb-2 font-medium text-gray-700 ">تاریخ انتشار</h2>
+
+
+      <div className="flex flex-row justify-between w-[full] h-[45px]  font-bold">
+
+         <div className="w-[40%]  flex flex-col justify-between ">    
+            <input type="date" className="border border-gray-400  bg-[#F5F5F5] h-full rounded-[5px]"/>
+             </div>
+
+        <div className=" w-[40%]  flex flex-col justify-between">
+        
+            <input type="date"  className="border border-gray-400  bg-[#F5F5F5] h-full rounded-[5px]"/>
+        </div>
+
+        
+        </div>
+
+        </div>
+
+    {/*sortBy*/}
+     <div className="sorting w-[90%] block md:hidden " >
+       <label className="text-xs font-medium text-gray-700 block mb-3 pr-2">
+         مرتب سازی
+       </label>
+      <SortingBox
+      filters={filters}
+      setFilters={setFilters}
+        updateActiveFilters={updateActiveFilters}
+        filterBt={filterBt}
+       />
+
+     </div>
+
+    </div>
+
+	</div>
+	
+       
+  {/* className="sm:w-[clamp(700px,60%,1200px)] lg:w-[clamp(800px,60%,1200px) xl:w-[clamp(850px,60%,1200px)]" */}
+
+  <div className=" lg:w-[960px] md:w-[clamp(700px,60%,1200px)]  min-h-[1200px]">  
+
+    <div className=" shadow-md shadow-purple-200 h-[50px] bg-white rounded-[5px] mb-[10px] flex justify-between items-center gap-5">
+
+	<div className="group  rounded-[5px] p-[3px] leading-[25px] relative text-sm text-[#444] mr-[10px]">  
+
+     
+     {!filterBt &&<SortingBox
+       filters={filters}
+       setFilters={setFilters}
+      updateActiveFilters={ updateActiveFilters}
+      filterBt={filterBt}
+     /> 
+       }
+
+       <button type="submit" className=" relative block  lg:hidden
+       border border-gray-300 rounded-lg p-2 text-sm text-white
+        cursor-pointer flex align-items-center bg-[#9B0EE1]"
+        onClick={()=>setFilterBt(!filterBt)}>
+           <img src={FilterIco}/>
+          فیلتر ها
+       </button>
+		 </div>
+
+
+
+    <div className=" flex flex-row gap-[10px] ml-[10px]">
+	<div style={ViewBt} className={view === "view2" ? "bg-[#9B0EE1]" : " "}  onClick={()=>setview("view2")}><img src={view === "view2" ? View2v2 : View2}/></div>  
+	<div style={ViewBt} className={view === "view1" ? "bg-[#9B0EE1]" : " "}  onClick={()=>setview("view1")}><img src={view === "view1" ? View1 : View1v1}/></div>
+    </div>
+  </div>
+
+    <div id="gridNews" className={view}>
+
+    {currentItems.map((card)=>(
+            <NewsCard 
+            key={card.id}
+            price={card.cost}
+            id={card.id}
+            name={card.title}
+            // like={Math.round(card.courseRate.avg/card.courseRate.count ? card.courseRate.avg/card.courseRate.count : 0)}
+            category={card.levelName}
+            teacher={card.teacherName}
+            Img={card.currentImageAddress}
+            date={card.startTime}
+          />
+        ))}
+
+       
+      <div className="pagebuttons w-full p-5 flex justify-center mt-6 space-x-2">
+
+        <button type="submit" onClick={()=>currentPage !=1 && setCurrentPage(currentPage -1)}
+          className={` w-8 h-8 text-center  rounded ${
+              currentPage === 1
+                ? "bg-purple-600 text-white"
+                : "bg-gray-200 hover:bg-gray-300"
+            }`}>{"<"}</button>
+        {Array.from({ length: totalPages }, (_,i) => i + 1).map((page) => (
+          <button
+            key={page}
+            onClick={() => handlePageChange(page)}
+            className={` w-8 h-8 text-center  rounded ${
+              currentPage === page
+                ? "bg-purple-600 text-white"
+                : "bg-gray-200 hover:bg-gray-300"
+            }`}
+          >
+            {page}
+          </button>
+        ))}
+         <button type="submit" onClick={()=>totalPages != currentPage && setCurrentPage(currentPage + 1)} 
+          className={` w-8 h-8 text-center  rounded ${
+              currentPage === totalPages
+                ? "bg-purple-600 text-white"
+                : "bg-gray-200 hover:bg-gray-300"
+            }`}>{">"}</button>
+      </div>
+        
+    </div>	
+
+	</div>
+ </div>
+
     )
+
+    
 }
-export default newsContent
+export default newsContent;

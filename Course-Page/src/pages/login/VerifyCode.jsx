@@ -17,8 +17,8 @@ const validationSchema=Yup.object({
     lg:float-left lg:block lg:bg-[url('/izardLogin.png')] lg:bg-[length:100%_100%] lg:w-[40px] lg:h-[133px]
     "></div>
   <div className=' m-auto w-[207px] h-[67px] '>
-<p className='m-auto w-[97px] h-[25px] text-[16px] '>خوش اومدی:)</p>
-<h2 className='text-[22px] m-auto w-[207px]  h-[38px]  '>   کد تایید</h2>
+<p className='m-auto w-[97px] h-[25px] text-[16px] font-medium text-[black]/70 '>خوش اومدی:)</p>
+<h2 className='text-[22px] m-auto w-[207px]  h-[38px] font-bold  '>   کد تایید</h2>
   </div>
 
   <Formik initialValues={{

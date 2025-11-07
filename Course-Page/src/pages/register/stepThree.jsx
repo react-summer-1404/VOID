@@ -15,9 +15,9 @@ const validationSchema=Yup.object({
   return (
     <div dir="rtl" className=' m-auto w-[100%] h-[400px] 
     lg:m-[100px 50px] lg:w-[50%] lg:h-[300px]'>
-            <div className=' m-auto w-[207px] h-[67px] '>
-    <p className='m-auto w-[97px] h-[25px] text-[16px] '>خوش اومدی:)</p>
-    <h2 className='text-[22px] m-auto w-[207px]  h-[38px]  '>ورود با حساب کاربری</h2>
+            <div className='text-center m-auto w-[207px] h-[67px] '>
+    <p className='m-auto w-[97px] h-[25px] text-[16px] font-medium text-[black]/70  '>خوش اومدی:)</p>
+    <h2 className='text-[22px] m-auto w-[207px]  h-[38px]  font-bold '>ورود با حساب کاربری</h2>
     </div>
 <Formik initialValues={{
   Email:'',
@@ -25,7 +25,7 @@ const validationSchema=Yup.object({
   accet:''
 }}
 onSubmit ={(values)=>{
-    navigate("/")
+    navigate("/authLayout")
   console.log(values)
 }}
 validationSchema={validationSchema}
@@ -33,10 +33,10 @@ validationSchema={validationSchema}
 <Form  className='m-auto  w-[70%] h-[229px]
 lg:h-[100%]'>
 
-      <div className="flex w-[100%] h-[15%] mt-[30px]  bg-[#4B4B4B14] rounded-lg">
-      <div className="w-[10%] h-[100%]  bg-[url('/Password.png')] bg-no-repeat bg-[position:50%_30%] "></div>
+      <div className="flex items-center w-[100%] h-[15%] mt-[30px]  bg-[#4B4B4B14] rounded-lg">
+      <div className="w-[10%] h-[50%] lg:mr-0 mr-2  bg-[url('/Password.png')] bg-no-repeat bg-[position:50%_30%] "></div>
       <Field  className="w-[380px] h-[35px] outline-none "
-          type="text"
+          type="email"
           placeholder=" ایمیل"
           name="Email"
           id="Email"
@@ -47,10 +47,10 @@ lg:h-[100%]'>
          name="Email"
          component={"p"}
         />
-      <div className="flex w-[100%] h-[15%] mt-[30px]  bg-[#4B4B4B14] rounded-lg">
-      <div className="w-[10%] h-[100%]  bg-[url('/Password.png')] bg-no-repeat bg-[position:50%_40%] "></div>
+      <div className="flex items-center w-[100%] h-[15%] mt-[30px]  bg-[#4B4B4B14] rounded-lg">
+      <div className="w-[10%] h-[50%] lg:mr-0 mr-2  bg-[url('/Password.png')] bg-no-repeat bg-[position:50%_40%] "></div>
       <Field  className="w-[380px] h-[35px] outline-none "
-          type="number"
+          type="text"
           placeholder=" رمز ورود"
           name="pass"
           id="pass"
@@ -60,8 +60,8 @@ lg:h-[100%]'>
          name="pass"
          component={"p"}
         />
-      <div className="flex w-[100%] h-[15%] mt-[30px]  bg-[#4B4B4B14] rounded-lg">
-      <div className="w-[10%] h-[100%]  bg-[url('/Password.png')] bg-no-repeat bg-[position:50%_40%] "></div>
+      <div className="flex items-center w-[100%] h-[15%] mt-[30px]  bg-[#4B4B4B14] rounded-lg">
+      <div className="w-[10%] h-[50%] lg:mr-0 mr-2  bg-[url('/Password.png')] bg-no-repeat bg-[position:50%_40%] "></div>
       <Field  className="w-[380px] h-[35px] outline-none "
           type="number"
           placeholder="  کد تایید"

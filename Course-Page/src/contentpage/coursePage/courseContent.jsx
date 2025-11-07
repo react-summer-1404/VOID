@@ -46,7 +46,6 @@ const courseContent = () => {
         fetchProduct()
       },[]);  
 
-
         ////////////////////////////////////////////////
    ////filter data
 	 const [range, setRange] = useState([0, 100000000]);

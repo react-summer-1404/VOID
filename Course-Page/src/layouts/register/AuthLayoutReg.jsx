@@ -13,6 +13,8 @@ import { Outlet } from 'react-router-dom'
   bg-[rgb(155,14,223)]
  w-full
  h-screen
+ overflow-hidden
+ font-medium
 
  " >
     <header className=" 

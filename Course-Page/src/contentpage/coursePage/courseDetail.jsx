@@ -15,6 +15,7 @@ import Out from "../../assets/icon/out.png"
 import Send from "../../assets/icon/send.png"
 import "../../assets/style/tailwinds/tailwindSt(productCard).css"
 import Favorite from "../../assets/icon/favorite.png"
+import apiClient from "../../hook/interceptor.js"
 
 const courseDetail = () => {
   
@@ -59,9 +60,9 @@ const courseDetail = () => {
       
     },[Product,id])   
 
-    // if(selectedCourse)
-    // console.log("selectedCourse",selectedCourse);
-    //  else{console.log("وجود ندارد")}
+    if(selectedCourse)
+    console.log("selectedCourse",selectedCourse);
+     else{console.log("وجود ندارد")}
     
   //relatedProduct
   useEffect(()=>{
@@ -74,23 +75,38 @@ const courseDetail = () => {
    
   ///////////////////////////////////////////////////
    const [rating, setRating] = useState(0);
-    const [hover, setHover] = useState(0);
+   const [Rated, setRated] = useState(false); 
     const[like,setLike] = useState(false);
     const[dissLike,setDissLike] = useState(false);
-
+ useEffect(() => {
+  setRating(selectedCourse?.courseRate?.avg ?? 0);
+}, [selectedCourse]);
   
 ////////////////rating
   const handleRating = async (rate) => {
+    if (Rated) {
+        console.log('امتیاز داده شده');
+    return;
+     }
+     else{
   try {
-    const courseRate = await axios.post(
+    const courseRate = await apiClient.post(
       `https://sepehracademy.liara.run/Course/SetCourseRating?CourseId=${selectedCourse.courseId}&RateNumber=${rate}`
     );
     
     setRating(rate);
-    console.log('امتیاز ثبت شد:', rate);
+     setRated(true);
+    console.log('امتیاز:', rate);
   } catch (error) {
     console.error('خطا:', error);
   }
+  finally{
+   if(Rated = false){  
+    window.location.reload();
+    }
+   
+  }
+}
 };
 /////////////////////
 
@@ -98,47 +114,51 @@ const courseDetail = () => {
 
 const likeHandler = async ()=>{
   try {
-    const courseAddLike = await axios.post(
+    const courseAddLike = await apiClient.post(
       `https://sepehracademy.liara.run/Course/AddCourseLike?CourseId=${selectedCourse.courseId}`
     );
   } catch (error) {
-    console.error('خطا:', error);
+    console.error('خطا', error);
   }finally{
     setLike(!like);
+    window.location.reload();
   }
 
   if(like === true){
      try {
-    const courseDeleteLike = await axios.delete(
+    const courseDeleteLike = await apiClient.delete(
       `https://sepehracademy.liara.run/Course/DeleteCourseLike`
     );
   } catch (error) {
-    console.error('خطا:', error);
+    console.error('خطا', error);
   }finally{
     setLike(!like);
+    window.location.reload();
   }
    }
 }
 
 const dissLikeHandler = async ()=>{
    try {
-    const courseAddDissLike = await axios.post(
+    const courseAddDissLike = await apiClient.post(
       `https://sepehracademy.liara.run/Course/AddCourseDissLike?CourseId=${selectedCourse.courseId}`
     );
   } catch (error) {
-    console.error('خطا:', error);
+    console.error('خطا', error);
   }finally{
     setDissLike(!dissLike);
+    window.location.reload();
   }
    if(dissLike){
      try {
-    const coursDeleteDissLike = await axios.delete(
+    const coursDeleteDissLike = await apiClient.delete(
       `https://sepehracademy.liara.run/Course/DeleteCourseDissLike`
     );
   } catch (error) {
-    console.error('خطا:', error);
+    console.error('خطا', error);
   }finally{
     setDissLike(!dissLike);
+    window.location.reload();
   }
    }
 
@@ -314,11 +334,9 @@ const dissLikeHandler = async ()=>{
                  <button
                    key={star}
                    onClick={() => handleRating(star)}
-                   onMouseEnter={() => setHover(star)}
-                   onMouseLeave={() => setHover(0)}
                    className=" hover:scale-110 cursor-pointer"
                  >
-                   <img className="w-[20px] h-[20px]" src={ star <=(hover || rating) ? Star : emptyStar}/>
+                   <img className="w-[20px] h-[20px]" src={ star <=(rating) ? Star : emptyStar}/>
                  </button>
                ))}
              </div>

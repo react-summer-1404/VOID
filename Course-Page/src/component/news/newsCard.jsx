@@ -12,7 +12,7 @@ import Pen from "../../assets/landPagePic/pen.png"
 import Eye from "../../assets/landPagePic/eye.png"
 
 
-const NewsCard = ({price,id,name,like,category,teacher,Img,date}) => {
+const NewsCard = ({price,id,name,like,category,teacher,Img,view}) => {
 
     
 
@@ -52,7 +52,7 @@ const NewsCard = ({price,id,name,like,category,teacher,Img,date}) => {
        </div>
    
            <div className="detail">
-           <span className="student"><img src={Eye}/>{"(280)بازدید کننده"}</span>
+           <span className="student"><img src={Eye}/>{`(${view})بازدید کننده`}</span>
            <button onClick={productDetailHandler} className="detailBt">بیشتر بخوانید</button>       
           </div> 
    

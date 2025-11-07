@@ -85,7 +85,7 @@ const handleMaxChange = (e) => {
     const SortCourse = [...Product].sort((a, b) => {
       if (filters.sortBy === "گران ترین") return b.cost - a.cost;
       if (filters.sortBy === "ارزان ترین") return a.cost - b.cost;
-      if (filters.sortBy === "محبوب ترین") return b.likeCount - a.likeCount;
+      if (filters.sortBy === "محبوب ترین") return Math.round(b.courseRate.avg/b.courseRate.count) - Math.round(a.courseRate.avg/a.courseRate.count);
       if (filters.sortBy === "جدید ترین") return new Date(b.date) - new Date(a.date);
       return 0;
     });

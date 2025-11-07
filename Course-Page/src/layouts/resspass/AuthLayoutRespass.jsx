@@ -12,6 +12,8 @@ import { Outlet } from 'react-router-dom'
  bg-[rgb(255,255,255)]
    w-full
    h-screen
+   overflow-hidden
+   font-medium
 
  " >
     <header className=" 
@@ -24,7 +26,7 @@ import { Outlet } from 'react-router-dom'
     </header>
     <div className=" w-[100%] h-[520px] mt-[10px]  "> {/* concent */}
      <div 
-    className=" p-[1px] w-[70%] h-[100%] mx-auto  bg-[url('/ImageRes.png')] bg-[length:100%_100%]
+    className=" p-[1px] w-full lg:w-[70%] h-full mx-auto  bg-[url('/ImageRes.png')] bg-[length:100%_100%]
     ">
           <Outlet />    
     </div>

@@ -5,6 +5,7 @@ import TeacherIco from "../assets/navIco/Teacher.png"
 import NewsIco from "../assets/navIco/News.png"
 import NightModeIco from "../assets/navIco/NightMode.png"
 import SearchIco from "../assets/icon/SearchIcon.png"
+import Profile from "../assets/icon/Profile.png"
 import {Link} from "react-router-dom"
 
 function Navbar() {
@@ -12,14 +13,14 @@ function Navbar() {
     <>
     <nav className=" w-[85%]  h-[20px] hidden lg:block  top-0 right-0 left-0  flex items-center justify-between mt-5 mb-10 z-500 rounded "></nav>
 
-    <nav className=" relative lg:fixed m-auto  bg-transparent lg:w-[85%] w-full top-0 backdrop-blur p-2 rounded-[15px] right-0 left-0  flex items-center lg:justify-between justify-end lg:flex-row flex-row-reverse mt-5 mb-10 z-50 rounded ">
+    <nav className=" relative lg:fixed m-auto  bg-transparent lg:w-[86%] w-full top-0 backdrop-blur p-2 rounded-[15px] right-0 left-0  flex items-center lg:justify-between justify-end lg:flex-row flex-row-reverse mt-5 mb-10 z-50 rounded ">
       
   <div className="w-32">
     <img src={logo} alt="Logo" className="w-full h-auto" />
   </div>
 
     
-        <ul className=" lg:flex hidden p-2 rounded-[10px] gap-10 text-gray-700 font-medium">
+        <ul className=" lg:flex hidden p-2 rounded-[10px] mr-8 gap-10 text-gray-700 font-medium">
           <Link to="/"><li className="relative cursor-pointer hover:text-purple-600 after:content-[''] after:absolute after:-bottom-1 after:right-0 after:w-0 after:h-[2px] after:bg-purple-600 hover:after:w-full after:transition-all after:duration-300">
             خانه
           </li></Link>
@@ -36,10 +37,13 @@ function Navbar() {
             ارتباط با ما
           </li></Link>
         </ul>
-
-        <Link to="/authLayout"><button  className=" bg-purple-600 text-white lg:px-6 px-2 ml-5 py-2 rounded-lg hover:bg-purple-700 transition-all cursor-pointer">
+        <div className="flex ">
+        <button className="rounded-full p-2 px-3 lg:block hidden  cursor-pointer bg-[#9B0EE1] flex flex col justify-center" type="submit"><img src={Profile}/></button>
+        <Link to="/authLayout"><button  className=" bg-purple-600 text-white lg:px-4 px-2 lg:ml-0 mr-2 ml-5 py-2 rounded-lg hover:bg-purple-700 transition-all cursor-pointer">
           ورود / ثبت‌نام
         </button></Link>
+        </div>
+        
     </nav>
 
 

@@ -11,6 +11,8 @@ const AuthLayout = () => {
    bg-[rgb(60,139,133)]
    w-full
    h-screen
+   overflow-hidden
+   font-medium
    
    
  " >

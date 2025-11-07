@@ -1,6 +1,7 @@
 import { useParams , useNavigate } from "react-router-dom"
 import {useState, useEffect} from "react"
 import axios from "axios"
+import apiClient from "../../hook/interceptor.js"
 import PicIco from "../../assets/icon/Education.png"
 import Like from "../../assets/icon/like.png"
 import Dislike from "../../assets/icon/dislike.png"
@@ -79,24 +80,37 @@ const newsDetail = () => {
  
    
   ///////////////////////////////////////////////////
-   const [rating, setRating] = useState(0);
-    const [hover, setHover] = useState(0);
+  const [rating, setRating] = useState(0);
+   const [Rated, setRated] = useState(false); 
     const[like,setLike] = useState(false);
     const[dissLike,setDissLike] = useState(false);
-
+ useEffect(() => {
+  setRating(selectedNews?.newsRate?.avg ?? 0);
+}, [selectedNews]);
   
 ////////////////rating
   const handleRating = async (rate) => {
+    if (Rated) {
+        console.log('امتیاز داده شده');
+    return;
+     }
+     else{
   try {
-    const courseRate = await axios.post(
-      `https://sepehracademy.liara.run/Course/SetCourseRating?CourseId=${selectedNews.courseId}&RateNumber=${rate}`
+    const courseRate = await apiClient.post(
+      `https://sepehracademy.liara.run/News/NewsRate?NewsId=${selectedNews.id}&RateNumber=${rate}`
     );
     
     setRating(rate);
-    console.log('امتیاز ثبت شد:', rate);
+     setRated(true);
+    console.log('امتیاز:', rate);
   } catch (error) {
     console.error('خطا:', error);
   }
+  finally{
+   
+   
+  }
+}
 };
 /////////////////////
 
@@ -104,49 +118,53 @@ const newsDetail = () => {
 
 const likeHandler = async ()=>{
   try {
-    const courseAddLike = await axios.post(
-      `https://sepehracademy.liara.run/Course/AddCourseLike?CourseId=${selectedNews.courseId}`
+    const courseAddLike = await apiClient.post(
+      `https://sepehracademy.liara.run/News/NewsLike/:NewsId`
     );
   } catch (error) {
-    console.error('خطا:', error);
+    console.error('خطا', error);
   }finally{
     setLike(!like);
+    // window.location.reload();
   }
 
   if(like === true){
      try {
-    const courseDeleteLike = await axios.delete(
-      `https://sepehracademy.liara.run/Course/DeleteCourseLike`
+    const courseDeleteLike = await apiClient.delete(
+      `https://sepehracademy.liara.run/News/DeleteLikeNews`
     );
   } catch (error) {
-    console.error('خطا:', error);
+    console.error('خطا', error);
   }finally{
     setLike(!like);
+    // window.location.reload();
   }
    }
 }
 
 const dissLikeHandler = async ()=>{
    try {
-    const courseAddDissLike = await axios.post(
-      `https://sepehracademy.liara.run/Course/AddCourseDissLike?CourseId=${selectedNews.courseId}`
+    const courseAddDissLike = await apiClient.post(
+      `https://sepehracademy.liara.run/News/NewsDissLike/:NewsId`
     );
   } catch (error) {
-    console.error('خطا:', error);
+    console.error('خطا', error);
   }finally{
     setDissLike(!dissLike);
+    // window.location.reload();
   }
-   if(dissLike){
-     try {
-    const coursDeleteDissLike = await axios.delete(
-      `https://sepehracademy.liara.run/Course/DeleteCourseDissLike`
-    );
-  } catch (error) {
-    console.error('خطا:', error);
-  }finally{
-    setDissLike(!dissLike);
-  }
-   }
+  //  if(dissLike){
+  //    try {
+  //   const coursDeleteDissLike = await apiClient.delete(
+  //     `https://sepehracademy.liara.run/Course/DeleteCourseDissLike`
+  //   );
+  // } catch (error) {
+  //   console.error('خطا', error);
+  // }finally{
+  //   setDissLike(!dissLike);
+  //   window.location.reload();
+  // }
+  //  }
 
 }
 
@@ -334,11 +352,9 @@ const dissLikeHandler = async ()=>{
                  <button
                    key={star}
                    onClick={() => handleRating(star)}
-                   onMouseEnter={() => setHover(star)}
-                   onMouseLeave={() => setHover(0)}
                    className=" hover:scale-110 cursor-pointer"
                  >
-                   <img className="w-[20px] h-[20px]" src={ star <=(hover || rating) ? Star : emptyStar}/>
+                   <img className="w-[20px] h-[20px]" src={ star <=(rating) ? Star : emptyStar}/>
                  </button>
                ))}
              </div>
@@ -350,13 +366,13 @@ const dissLikeHandler = async ()=>{
                   
                   <button onClick={()=>{likeHandler()}} className="flex items-center gap-1 hover:text-green-600 transition">
                     <span className="text-lg"><img src={Like}/></span>
-                    <span className="font-medium">{selectedNews ? selectedNews.likeCount : "0"}</span>
+                    <span className="font-medium">{selectedNews ? selectedNews.currentLikeCount : 0}</span>
                   </button>
                   
                   
                   <button onClick={()=> dissLikeHandler()} className="flex items-center gap-1 hover:text-red-600 transition">
                     <span className="text-lg"><img src={Dislike}/></span>
-                    <span className="font-medium">{selectedNews ? selectedNews.dissLikeCount : "0"}</span>
+                    <span className="font-medium">{selectedNews ? selectedNews.currentDissLikeCount : 0}</span>
                   </button>
                 </div>
                 

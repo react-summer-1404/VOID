@@ -2,6 +2,7 @@ import {useState,useEffect} from "react"
 import axios from "axios"
 import NewsCard from "../../component/news/newsCard.jsx"
 import SortingBox from "../../component/sortingBox.jsx"
+import SortingBoxNews from "../../component/sortingBoxNews.jsx"
 import View1 from "../../assets/icon/view1.png"
 import View1v1 from "../../assets/icon/view1.v1.png"
 import View2 from "../../assets/icon/view2.png"
@@ -42,7 +43,7 @@ const newsContent = () => {
         
         fetchNews()
       },[]);  
-
+          console.log("NewsDate",new Date(News.insertDate));
 
         ////////////////////////////////////////////////
    ////filter data
@@ -52,7 +53,12 @@ const newsContent = () => {
     const [filters, setFilters] = useState({
     category: '',
 	  sortBy:'',
+    FromDate:'',
+    ToDate:'',
      });
+        console.log("cat",filters.category);
+    //  console.log("From",filters.FromDate);
+     console.log("to",new Date(filters.ToDate));
 
       const [showCategories, setShowCategories] = useState(false);
 
@@ -69,12 +75,24 @@ const newsContent = () => {
     updateActiveFilters({ ...filters, category: newCategory });
   };
 
+  const handleFromDateChange = (date) => {
+    const newFromDate = date;
+    setFilters({ ...filters, FromDate: newFromDate });
+    updateActiveFilters({ ...filters, FromDate: newFromDate });
+  };
+  const handleToDateChange = (date) => {
+    const newFromDate = new Date(date);
+    setFilters({ ...filters, ToDate: newFromDate });
+    updateActiveFilters({ ...filters, ToDate: newFromDate });
+  };
+
   const resetFilters = () => {
     setFilters({
       category: '',
-   	  sortBy:'',
+      sortBy:'',
+   	  ToDate:'',
+      FromDate:'',
       });
-      setRange([0, 100000000]);
      setActiveFilters(0);
      setFilterNull(true);
      }; 
@@ -84,21 +102,30 @@ const newsContent = () => {
 ///////////////////////////////////////
  //sorting & filtering function     
     const SortCourse = [...News].sort((a, b) => {
-      if (filters.sortBy === "گران ترین") return b.cost - a.cost;
-      if (filters.sortBy === "ارزان ترین") return a.cost - b.cost;
-      if (filters.sortBy === "محبوب ترین") return b.likeCount - a.likeCount;
-      if (filters.sortBy === "جدید ترین") return new Date(b.date) - new Date(a.date);
+      if (filters.sortBy === "محبوب ترین") return Math.round(b.newsRate.avg/b.newsRate.count) - Math.round(a.newsRate.avg/a.newsRate.count);
+      if (filters.sortBy === "جدید ترین") return new Date(b.insertDate) - new Date(a.insertDate);
       return 0;
     });
        
      const FilteredCourse = SortCourse.filter((el) => {
      
      const matchCategory = 
-       !filters.category || el.describe === filters.category; 
+       !filters.category || el.title === filters.category; 
+
+     const DateMatchTo =
+     !filters.ToDate || new Date(el.insertDate) <= new Date(filters.ToDate);  
+     const DateMatchFrom =
+     !filters.FromDate || new Date(el.insertDate) >= new Date(filters.FromDate);  
+        
+       
      return (
-       matchCategory
+       matchCategory&&
+       DateMatchTo&&
+       DateMatchFrom
+      
        );
    });
+
     
   /////////////////////////////////////////////
 
@@ -107,6 +134,7 @@ const newsContent = () => {
 	  const updateActiveFilters = (currentFilters) => {
       let count = 0;
       if (currentFilters.category) count++, setFilterNull(false);  
+      if (currentFilters.ToDate || currentFilters.FromDate) count++, setFilterNull(false);   
     if(currentFilters.sortBy) count++ , setFilterNull(false);
     if(count === 0) setFilterNull(true);
     setActiveFilters(count);
@@ -216,12 +244,12 @@ return(
       <div className="flex flex-row justify-between w-[full] h-[45px]  font-bold">
 
          <div className="w-[40%]  flex flex-col justify-between ">    
-            <input type="date" className="border border-gray-400  bg-[#F5F5F5] h-full rounded-[5px]"/>
+            <input type="date" onChange={handleFromDateChange}  className="border border-gray-400  bg-[#F5F5F5] h-full rounded-[5px]"/>
              </div>
 
         <div className=" w-[40%]  flex flex-col justify-between">
         
-            <input type="date"  className="border border-gray-400  bg-[#F5F5F5] h-full rounded-[5px]"/>
+            <input type="date" onChange={handleToDateChange}  className="border border-gray-400  bg-[#F5F5F5] h-full rounded-[5px]"/>
         </div>
 
         
@@ -234,7 +262,7 @@ return(
        <label className="text-xs font-medium text-gray-700 block mb-3 pr-2">
          مرتب سازی
        </label>
-      <SortingBox
+      <SortingBoxNews
       filters={filters}
       setFilters={setFilters}
         updateActiveFilters={updateActiveFilters}
@@ -257,7 +285,7 @@ return(
 	<div className="group  rounded-[5px] p-[3px] leading-[25px] relative text-sm text-[#444] mr-[10px]">  
 
      
-     {!filterBt &&<SortingBox
+     {!filterBt &&<SortingBoxNews
        filters={filters}
        setFilters={setFilters}
       updateActiveFilters={ updateActiveFilters}
@@ -287,13 +315,13 @@ return(
     {currentItems.map((card)=>(
             <NewsCard 
             key={card.id}
-            price={card.cost}
+            view={card.currentView}
             id={card.id}
             name={card.title}
-            // like={Math.round(card.courseRate.avg/card.courseRate.count ? card.courseRate.avg/card.courseRate.count : 0)}
+            like={Math.round(card.newsRate.avg/card.newsRate.count ? card.newsRate.avg/card.newsRate.count : 0)}
             category={card.levelName}
             teacher={card.teacherName}
-            Img={card.currentImageAddress}
+            Img={card.currentImageAddress || card.currentImageAddressTumb}
             date={card.startTime}
           />
         ))}

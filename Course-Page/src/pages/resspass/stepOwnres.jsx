@@ -11,11 +11,11 @@ const validationSchema=Yup.object({
 const stepOwnres = () => {
   const navigate = useNavigate();
   return (
-        <div dir="rtl" className='p-[1px] mt-[80px] m-auto w-[500px] h-[410px] bg-white shadow-md shadow-gray-400 rounded-lg '>
+        <div dir="rtl" className=' lg:mt-[80px] mt-[180px] flex flex-col items-center text-center lg:m-auto lg:w-[500px] h-[80%] lg:h-[330px] w-full   bg-white rounded-t-[50px] lg:shadow-md inset-shadow-sm lg:rounded-lg '>
 
       <div className='  m-auto  mt-[50px] w-[207px] h-[67px] '>
-    <p className='m-auto mt-[50px]  w-[97px] h-[25px] text-[16px] '> ایمیل بازیابی</p>
-    <h2 className='text-[22px] m-auto w-[207px]  h-[38px]  '>    فراموش رمز عبور</h2>
+    <p className='m-auto mt-[50px]  w-[97px] h-[25px] text-[16px] font-medium text-[black]/70 '> بازیابی</p>
+    <h2 className='text-[22px] m-auto w-[207px]  h-[38px] font-bold  '>    فراموش رمز عبور</h2>
       </div>
     
       <Formik initialValues={{
@@ -30,9 +30,9 @@ const stepOwnres = () => {
     <Form className='
     m-auto  w-[70%] h-[129px] 
     lg:h-[50%] '>
-         <div className="flex w-[100%] h-[20%] mt-[30px]  bg-[#4B4B4B14] rounded-lg">
-         <div className="w-[10%] h-[100%]  bg-[url('/Message.png')] bg-no-repeat bg-[position:50%_40%] "></div>
-         <Field className=" w-[380px] h-[35px] outline-none "
+         <div className="flex items-center w-[100%] lg:h-[25%] h-[30%] mt-[30px]  bg-[#4B4B4B14] rounded-lg">
+         <div className="w-[10%] h-[50%] lg:mr-0 mr-2  bg-[url('/Message.png')] bg-no-repeat bg-[position:50%_40%] "></div>
+         <Field className=" w-[380px] h-[45px] outline-none "
              type="email"
              placeholder="   ایمیل"
              name="email"

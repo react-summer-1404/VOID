@@ -13,7 +13,7 @@ const stats = [
 
 const StatsSection = () => {
   return (
-    <section className="flex justify-center items-center gap-30 py-16 bg-gray-50" dir="ltr">
+    <section className="flex justify-center items-center gap-30 py-0 bg-gray-50 -mt-30" dir="ltr">
       {stats.map((item) => (
         <div key={item.id} className="flex flex-row-reverse items-center gap-4 ">
       

@@ -105,7 +105,7 @@ const CourseSlide = () => {
   const totalDots = maxIndex + 1
 
   return (
-    <section className='flex flex-col gap-12 justify-center items-center m-50 relative'>
+    <section className='flex flex-col gap-12 justify-center items-center m-20 relative'>
       <TitleLanding
         title="با هر دوره، یک قدم جلوتر"
         image1={vect}

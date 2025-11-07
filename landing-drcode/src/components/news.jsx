@@ -1,8 +1,6 @@
 import React from 'react'
 import vect from "../assets/vect.png"
 import vect2 from "../assets/vect2.png"
-import polygon1 from "../assets/Polygon.png";
-import polygon2 from "../assets/Polygon2.png";
 import bg1 from "../assets/bg1.png";
 import bg2 from "../assets/bg2.png";
 import bg3 from "../assets/bg3.png";
@@ -12,7 +10,7 @@ import TitleLanding from './reusableComps/TitleLanding'
 
 const news = () => {
   return (
-    <section className='flex flex-col gap-12 justify-center items-center m-50 relative'>
+    <section className='flex flex-col gap-12 justify-center items-center m-20 relative'>
        <TitleLanding
           title= "با هر خبر ، از همه جلوتر"
           image1={vect}
@@ -47,9 +45,6 @@ const news = () => {
 </div>
 
         {/* gnx */}
-
-      <img src={polygon1} className=' absolute top-140 -right-50 z-10'></img>
-      <img src={polygon2} className=' absolute top-160 -right-50'></img>
     </section>
   )
 }

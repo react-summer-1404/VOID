@@ -41,7 +41,7 @@ const UsSlider = () => {
     };
 
     return (
-        <section className='flex flex-col gap-30 justify-center items-center m-50 relative'>
+        <section className='flex flex-col gap-30 justify-center items-center m-20 relative'>
             <TitleLanding
                 title="خدمات حرفه ای ، کیفیت بی نظیر"
                 image1={vect3}

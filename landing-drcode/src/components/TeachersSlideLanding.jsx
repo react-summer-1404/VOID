@@ -49,7 +49,7 @@ const TeachersSlideLanding = () => {
   const visibleTeachers = getVisibleTeachers();
 
   return (
-    <section className='flex flex-col gap-12 justify-center items-center m-50 relative'>
+    <section className='flex flex-col gap-12 justify-center items-center m-20 relative'>
       <TitleLanding
         title="با هر استاد ، یک موفقیت"
         image1={vect3}

@@ -24,30 +24,7 @@ const stepOwn = () => {
  }}
 
  onSubmit ={async(values)=>{
-    navigate("/Reg/StepTwo")
-  // try {
-
-  //   const response = await axios.post(
-  //     "https://sepehracademy.liara.run/Sign/SendVerifyMessage",
-  //     { gmail: values.gmail },
-  //     { headers: { "Content-Type": "application/json" } }
-  //   );
-  //   console.log("response data:", response.data);
-  //   const successFlag =
-  //   response.data?.success === true || response.data?.success === "true";
-  //   if (successFlag) {
-  //     console.log("Navigating to step two...");
-  //     navigate("/Reg/StepTwo");
-  //   } else {
-  //     setErrors({
-  //       gmail: response.data?.message || "خطا در ارسال کد تأیید",
-  //     });
-  //   }
-  // } catch (err){
-  //   const msg = err.response?.data?.errors?.[0]?.msg ;
-  //   setErrors({ gmail: msg });
-  // }
-  
+    navigate("/Reg/StepTwo") 
 }}
 
  validationSchema={validationSchema}

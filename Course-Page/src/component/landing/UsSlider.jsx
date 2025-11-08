@@ -50,10 +50,10 @@ const UsSlider = () => {
             />
             <div className='flex gap-10'>
                 {/* GNX */}
-                <div className='relative w-lg h-full'>
+                <div className=' relative w-lg h-full'>
                     <div className='overflow-hidden h-full'>
                         <div 
-                            className='flex transition-transform duration-700 ease-in-out h-full'
+                            className='flex  transition-transform duration-700 ease-in-out h-full'
                             style={{ transform: `translateX(${currentSlide * -100}%)` }}
                         >
                             {slides.map((slide) => (
@@ -84,7 +84,7 @@ const UsSlider = () => {
                     </div>
                 </div>
 
-                <div className='flex gap-5'>
+                <div className=' flex gap-5 '>
                     <div className='relative flex flex-col gap-20'>
                         <img src={gap} alt="gap" className='absolute -left-3 -top-15 z-10' />
                         <img src={cash} alt="mulla" className='absolute right-0 top-29 z-10' />

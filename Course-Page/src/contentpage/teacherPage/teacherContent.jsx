@@ -1,9 +1,10 @@
-import {useState} from "react"
+import {useEffect, useState} from "react"
 import SortingBox from "../../component/sortingBox"
 import T1 from "../../assets/teacherAvatar/t1.png"
 import T2 from "../../assets/teacherAvatar/t2.png"
 import T3 from "../../assets/teacherAvatar/t3.png"
 import T4 from "../../assets/teacherAvatar/t4.png"
+import axios from "axios"
 
 const teacherContent = ({}) =>{  
 
@@ -17,7 +18,7 @@ const teacherContent = ({}) =>{
         {id:1 , name : "بر اساس دوره"},
         {id:2 , name : "بر اساس مقاله"},
 	 ]
-
+        const[teacherList,setTeacherList] = useState([]);
      const Teacher =[
         {id:1,name:"استاد بحر العلوم",title:"مدرس اصلی پژوهشگاه",courseCount:10,articale:5,img:T1},
         {id:2,name:"استاد بحر العلوم",title:"مدرس اصلی پژوهشگاه",courseCount:8,articale:2,img:T2},
@@ -37,6 +38,25 @@ const teacherContent = ({}) =>{
         {id:16,name:"استاد بحر العلوم",title:"مدرس اصلی پژوهشگاه",courseCount:10,articale:11,img:T4},
         
      ]
+
+     useEffect(()=>{
+        const teacherll= async()=>{
+           try{
+        const fechteacher = await axios.get("https://sepehracademy.liara.run/Home/GetTeachers");
+         const Data = fechteacher.data;
+           setTeacherList(Data);
+        }finally{
+
+        }   
+      };
+
+      teacherll();
+
+       
+     },[]);
+
+      console.log(teacherList)
+     
 
 
      const SortCourse = [...Teacher].sort((a, b) => {

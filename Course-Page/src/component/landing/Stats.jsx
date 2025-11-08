@@ -13,9 +13,9 @@ const stats = [
 
 const StatsSection = () => {
   return (
-    <section className="flex justify-center items-center gap-30 py-16 bg-gray-50" dir="ltr">
+    <section className="flex lg:flex-row flex-wrap lg:mr-20  items-center justify-center lg:gap-0 gap-20 bg-gray-50" dir="ltr">
       {stats.map((item) => (
-        <div key={item.id} className="flex flex-row-reverse items-center gap-4 ">
+        <div key={item.id} className="flex  lg:flex-row-reverse flex-col  lg:w-[20%] w-[30%] items-center gap-5 ">
       
        <div
   className={`flex items-center justify-center w-24 h-24 rounded-full bg-${item.color}-100`}

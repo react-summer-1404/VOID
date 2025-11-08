@@ -37,12 +37,11 @@ function Navbar() {
             ارتباط با ما
           </li></Link>
         </ul>
-        <div className="flex ">
-        <button className="rounded-full p-2 px-3 lg:block hidden  cursor-pointer bg-[#9B0EE1] flex flex col justify-center" type="submit"><img src={Profile}/></button>
+       
         <Link to="/authLayout"><button  className=" bg-purple-600 text-white lg:px-4 px-2 lg:ml-0 mr-2 ml-5 py-2 rounded-lg hover:bg-purple-700 transition-all cursor-pointer">
           ورود / ثبت‌نام
         </button></Link>
-        </div>
+        
         
     </nav>
 
@@ -61,9 +60,9 @@ function Navbar() {
           <Link to="/contentPage/courseContent"><li className="relative   after:content-[''] after:absolute after:-bottom-1 after:right-0 after:w-0 after:h-[2px] after:bg-[white] hover:after:w-full after:transition-all after:duration-300">
             <img src={NewsIco} />
           </li></Link>
-          <li className="relative  after:content-[''] after:absolute after:-bottom-1 after:right-0 after:w-0 after:h-[2px] after:bg-[white] hover:after:w-full after:transition-all after:duration-300">
+          <Link to="/contentPage/newsContent"><li className="relative  after:content-[''] after:absolute after:-bottom-1 after:right-0 after:w-0 after:h-[2px] after:bg-[white] hover:after:w-full after:transition-all after:duration-300">
             <img src={NightModeIco} />
-          </li>
+          </li></Link>
         </ul>
     </nav>
 

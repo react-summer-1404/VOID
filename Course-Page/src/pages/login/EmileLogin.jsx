@@ -25,8 +25,11 @@ const EmileLogin = () => {
   
       } catch (error) {
         console.error('خطاورود', error);
+        alert("ایمیل یا رمز عبور اشتباه است")
       }finally{
+        alert("ورود با موفقیت انجام شد")
         navigate("/")
+
       }
     };
    

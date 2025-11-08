@@ -6,6 +6,7 @@ import CourseCard from './reusableComps/CourseCard'
 import bg4 from '../../assets/landPagePic/bg4.png'
 import left from '../../assets/landPagePic/left.png'
 import right from '../../assets/landPagePic/right.png'
+import {useNavigate} from "react-router-dom"
 
 const CourseSlide = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -104,14 +105,14 @@ const CourseSlide = () => {
 
   const totalDots = maxIndex + 1
 
+  const navigate = useNavigate();
+   const more = ()=>{
+      navigate("/contentPage/courseContent")
+   }
+
   return (
-    <section className='flex flex-col gap-12 justify-center items-center m-50 relative'>
-      <TitleLanding
-        title="با هر دوره، یک قدم جلوتر"
-        image1={vect}
-        image2={vect2}
-        text="همه چیز را در دوره‌های ما یاد بگیرید"
-      />
+    <section className='flex flex-col gap-12 justify-center items-center m-20 relative'>
+     
       
       <div className='w-full px-8 overflow-hidden'>
         <div 
@@ -139,7 +140,7 @@ const CourseSlide = () => {
         </div>
       </div>
 
-      <div dir='ltr' className='flex items-center justify-between px-16 py-6 w-screen'>
+      <div dir='ltr' onClick={more}  className='flex items-center justify-between px-16 py-6 w-screen'>
         <button className='text-purple-700 px-6 py-2 rounded-lg border-2 border-purple-700 text-md hover:bg-purple-700 hover:text-white transition-colors'>
           بیشتر ببین
         </button>

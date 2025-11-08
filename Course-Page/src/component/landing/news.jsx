@@ -11,7 +11,7 @@ import TitleLanding from './reusableComps/TitleLanding'
 
 const news = () => {
   return (
-    <section className='flex flex-col gap-12 justify-center items-center m-50 relative'>
+    <section className='flex flex-col items-center gap-12 lg:w-[75%] m-auto mb-40 justify-center items-center m-50 relative'>
        <TitleLanding
           title= "با هر خبر ، از همه جلوتر"
           image1={vect}
@@ -21,7 +21,7 @@ const news = () => {
 
         {/* GNX */}
       
-<div className="grid grid-cols-1 md:grid-cols-3 gap-10 justify-items-center">
+<div className=" flex lg:flex-row flex-col  gap-10 justify-items-center">
   <NewsCard
     image={bg1}
     title="ریکت جی اس چیست؟"

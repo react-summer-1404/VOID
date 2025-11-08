@@ -5,8 +5,13 @@ import like from "../../../assets/landPagePic/Like.png";
 import calender from "../../../assets/landPagePic/calender.png";
 import ostad from "../../../assets/landPagePic/ostad.png";
 import group from "../../../assets/landPagePic/group.png";
+import {useNavigate} from "react-router-dom"
 
 const CourseCard = ({ image, title, number, teacher, date, price }) => {
+   const navigate = useNavigate();
+   const more = ()=>{
+      navigate("/contentPage/courseContent")
+   }
   return (
     <div className="relative w-full max-w-xs rounded-3xl overflow-hidden h-96 shadow-[0_0_10px_rgba(168,85,247,0.5)] border-4 border-white">
       <img src={image} className="w-full h-full object-cover" alt="" />
@@ -31,7 +36,7 @@ const CourseCard = ({ image, title, number, teacher, date, price }) => {
           </p>
 
           <div className="flex items-center justify-between" dir="ltr">
-            <button className="px-6 py-2 rounded-full border border-white/50 text-sm hover:bg-white hover:text-black transition-colors">
+            <button onClick={more} className="px-6 py-2 rounded-full border border-white/50 text-sm hover:bg-white hover:text-black transition-colors">
               مشاهده دوره
             </button>
             <span className="text-sm text-white/70 flex gap-1 justify-center items-center" dir="rtl">

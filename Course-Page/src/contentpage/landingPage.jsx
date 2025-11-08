@@ -20,7 +20,7 @@ const landingPage =()=> {
         <StatsSection />
         <CourseSlide />
         <TeachersSlideLanding />
-        <UsSlider />
+        <div className='lg:block hidden'><UsSlider /></div>
         <News />
       </main>
       <Footer/>

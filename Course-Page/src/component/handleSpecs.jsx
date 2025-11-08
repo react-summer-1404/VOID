@@ -23,7 +23,13 @@ const handleSpecs = ({cost,capicity,teacher})=>{
    const teacherPageHandler=()=>{
           navigate("/contentPage/teacherContent");
     }
+    
 
+
+    const handlecourseReserve = ()=>{
+      
+         alert("شما وارد دوره شدید")
+    }
 
     return(
         <div className="handleproductDetail  whitespace-nowrap bg-white  shadow-md  rounded-[20px]  h-[600px]
@@ -75,7 +81,7 @@ const handleSpecs = ({cost,capicity,teacher})=>{
        <div className="w-[95%] h-[40px]  flex justify-between place-items-center "><span className="flex items-center gap-1"> <img src={Status}/>وضیعت دوره</span> <span className="border border-gray-400 text-[gray] rounded-[17px] p-1 pr-2 pl-2 bg-gray-200 flex items-center gap-1 "><img src={Load}/>در حال بارگذاری</span></div>
        <div className="w-[95%] h-[40px]  flex justify-between place-items-center "><span className="flex items-center gap-1"> <img src={Price}/>قیمت</span><span className="flex flex-row gap-3 place-items-center h-[40px] items-center text-[15px]">{cost}<p className="text-purple-500">تومان</p></span></div>
         
-        <button className="w-[95%] h-[45px] text-xl rounded-[12px] border bg-[#9B0EE1] text-white mt-1">شرکت در دوره</button>
+        <button onClick={handlecourseReserve} className="w-[95%] h-[45px] text-xl rounded-[12px] border bg-[#9B0EE1] text-white mt-1">شرکت در دوره</button>
 
         <div className="w-[95%] h-[40px] flex justify-between mt-3 place-items-center border-b border-t border-[#eee] "><span className="text-[gray]">مشخصات استاد<img/></span><span onClick={()=>teacherPageHandler()} className="cursor-pointer text-[blue]">پروفایل مدرس {">"}</span></div>
         <div className="flex flex-row  place-items-center  w-[95%] h-[60px]">

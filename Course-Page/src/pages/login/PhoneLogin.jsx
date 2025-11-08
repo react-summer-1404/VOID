@@ -29,7 +29,9 @@ const PhoneLogin = () => {
   
       } catch (error) {
         console.error('خطاورود', error);
+         alert("شماره تلفن  و رمز عبور اشتباه است")
       }finally{
+        alert("ورود با موفقیت انجام شد")
         navigate("/")
       }
     };

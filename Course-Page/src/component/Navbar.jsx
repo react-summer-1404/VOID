@@ -6,6 +6,7 @@ import NewsIco from "../assets/navIco/News.png"
 import NightModeIco from "../assets/navIco/NightMode.png"
 import SearchIco from "../assets/icon/SearchIcon.png"
 import Profile from "../assets/icon/Profile.png"
+import Avatar from "../assets/navIco/avatar.png"
 import {Link} from "react-router-dom"
 
 function Navbar() {
@@ -13,10 +14,10 @@ function Navbar() {
     <>
     <nav className=" w-[85%]  h-[20px] hidden lg:block  top-0 right-0 left-0  flex items-center justify-between mt-5 mb-10 z-500 rounded "></nav>
 
-    <nav className=" relative lg:fixed m-auto  bg-transparent lg:w-[86%] w-full top-0 backdrop-blur p-2 rounded-[15px] right-0 left-0  flex items-center lg:justify-between justify-end lg:flex-row flex-row-reverse mt-5 mb-10 z-50 rounded ">
+    <nav className=" relative lg:fixed m-auto  bg-transparent lg:w-[86%] w-full top-0 backdrop-blur p-2 rounded-[15px] right-0 left-0  flex items-center  justify-between lg:flex-row flex-row-reverse mt-5 mb-10 z-50 rounded ">
       
-  <div className="w-32">
-    <img src={logo} alt="Logo" className="w-full h-auto" />
+  <div className="lg:w-32 w-[70%]">
+    <img src={logo} alt="Logo" className="w-32 h-auto" />
   </div>
 
     
@@ -33,14 +34,17 @@ function Navbar() {
           <Link to="/contentPage/teacherContent"><li className="relative cursor-pointer hover:text-purple-600 after:content-[''] after:absolute after:-bottom-1 after:right-0 after:w-0 after:h-[2px] after:bg-purple-600 hover:after:w-full after:transition-all after:duration-300">
             اساتید
           </li></Link>
-          <Link to="/contentPage/courseContent"><li className="relative cursor-pointer hover:text-purple-600 after:content-[''] after:absolute after:-bottom-1 after:right-0 after:w-0 after:h-[2px] after:bg-purple-600 hover:after:w-full after:transition-all after:duration-300">
+          <li className="relative cursor-pointer hover:text-purple-600 after:content-[''] after:absolute after:-bottom-1 after:right-0 after:w-0 after:h-[2px] after:bg-purple-600 hover:after:w-full after:transition-all after:duration-300">
             ارتباط با ما
-          </li></Link>
+          </li>
         </ul>
-       
-        <Link to="/authLayout"><button  className=" bg-purple-600 text-white lg:px-4 px-2 lg:ml-0 mr-2 ml-5 py-2 rounded-lg hover:bg-purple-700 transition-all cursor-pointer">
+        
+        <div className="flex flex-row h-full items-center">
+         <Link to="/dashboard" className=" w-[50px] h-[50px] rounded-full cursor-pointer"><img src={Avatar} className="w-full h-full" /></Link>      
+        <Link to="/authLayout"><button  className=" lg:block hidden bg-purple-600 text-white lg:px-4 px-2 lg:ml-0 mr-2 ml-5 py-2 rounded-lg hover:bg-purple-700 transition-all cursor-pointer">
           ورود / ثبت‌نام
         </button></Link>
+        </div>
         
         
     </nav>

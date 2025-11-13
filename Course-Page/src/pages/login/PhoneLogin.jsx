@@ -26,13 +26,13 @@ const PhoneLogin = () => {
         
         localStorage.setItem('token', response.data.token);
         console.log('ورود موفقیت آمیز', response.data);
+
+         alert("ورود با موفقیت انجام شد")
+        navigate("/")
   
       } catch (error) {
         console.error('خطاورود', error);
          alert("شماره تلفن  و رمز عبور اشتباه است")
-      }finally{
-        alert("ورود با موفقیت انجام شد")
-        navigate("/")
       }
     };
     
@@ -101,7 +101,7 @@ lg:h-[100%]'>
     </div>
         <button 
          className="w-[100%] h-[48px] appearance-none !bg-[#3C8B85] !text-white px-4 py-2 rounded-lg"
-        type="submit"> دریافت کد تایید
+        type="submit"> ورود به حساب کاربری
         </button>
       <div className="mx-auto  mt-[10px] flex w-[422px] h-[22px] ">
       <p>حساب کاربری نداری؟</p>

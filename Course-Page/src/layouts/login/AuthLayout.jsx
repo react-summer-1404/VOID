@@ -29,7 +29,7 @@ const AuthLayout = () => {
     w-[180px] h-[40px]  mt-[15px]  bg-[url('/Logo.png')] bg-[length:100%_100%]" ></div>
     </header>
     <div className="
-    w-full mt-[80px]  bg-[url('/backgroundm.png')] bg-[length:100%_100%]
+    w-full mt-[80px] h-[90%]  bg-[url('/backgroundm.png')] bg-[length:100%_100%]
     lg:bg-[url('/background.png')] lg:bg-[length:100%_100%] lg:mt-[-45px] lg:h-[99%] lg:w-[100%]
     "> 
     <div className=" w-[100%] h-[520px] mt-[10px] flex justify-between "> {/* concent */}

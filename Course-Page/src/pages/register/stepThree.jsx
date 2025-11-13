@@ -3,15 +3,46 @@ import { useNavigate } from "react-router-dom"
 import { Formik } from "formik"
 import { Form ,Field,ErrorMessage} from "formik"
 import * as Yup from "yup";
+import apiClient from "../../hook/interceptor"
 const validationSchema=Yup.object({
     Email:Yup.string().required("لطفا ایمیل را وارد کنید"),
-  pass:Yup.string().required("لطفا  رمز ورود را وارد کنید"),
-  accet:Yup.string().required("لطفا  کد تایید را وارد کنید")
+  phone:Yup.string().required("لطفا شماره موبایل خود را وارد کنید"),
+  pass:Yup.string().required("لطفا  رمز عبور خود را وارد کنید")
   
 });
 
  const stepThree = () => {
     const navigate = useNavigate();
+
+
+
+const handleThree =async(Email,phone,pass)=>{
+   
+  try {
+    const RegThree = await apiClient.post(
+      "https://sepehracademy.liara.run/Sign/Register",
+      {
+          gmail: Email,
+          phoneNumber: phone,
+          password: pass
+      }
+    );
+    
+   if (RegThree.data.success === true) {
+      const token = RegThree.data.token;
+      
+      if (token) {
+        localStorage.setItem('token', token);
+        alert("ثبت نام با موفقیت انجام شد");
+        navigate('/authLayout');
+      }
+    }
+      
+    } catch (error) { 
+    alert("خطا در ثبت نام");
+  }
+};
+ 
   return (
     <div dir="rtl" className=' m-auto w-[100%] h-[400px] 
     lg:m-[100px 50px] lg:w-[50%] lg:h-[300px]'>
@@ -21,12 +52,12 @@ const validationSchema=Yup.object({
     </div>
 <Formik initialValues={{
   Email:'',
-  pass:'',
-  accet:''
+  phone:'',
+  pass:''
 }}
 onSubmit ={(values)=>{
-    navigate("/authLayout")
-  console.log(values)
+   
+  handleThree(values.Email,values.phone,values.pass)
 }}
 validationSchema={validationSchema}
 >
@@ -51,22 +82,22 @@ lg:h-[100%]'>
       <div className="w-[10%] h-[50%] lg:mr-0 mr-2  bg-[url('/Password.png')] bg-no-repeat bg-[position:50%_40%] "></div>
       <Field  className="w-[380px] h-[35px] outline-none "
           type="text"
-          placeholder=" رمز ورود"
-          name="pass"
-          id="pass"
+          placeholder=" شماره موبایل"
+          name="phone"
+          id="phone"
         />
         </div>
         <ErrorMessage class="text-[red] text-[0.82rem] mt-[4px] leading-[1.4] flex items-center gap-[6px] animate-fadeIn"
-         name="pass"
+         name="phone"
          component={"p"}
         />
       <div className="flex items-center w-[100%] h-[15%] mt-[30px]  bg-[#4B4B4B14] rounded-lg">
       <div className="w-[10%] h-[50%] lg:mr-0 mr-2  bg-[url('/Password.png')] bg-no-repeat bg-[position:50%_40%] "></div>
       <Field  className="w-[380px] h-[35px] outline-none "
-          type="number"
-          placeholder="  کد تایید"
-          name="accet"
-          id="accet"
+          type="text"
+          placeholder="  رمز عبور شما"
+          name="pass"
+          id="pass"
         />
         </div>
         <ErrorMessage class="text-[red] text-[0.82rem] mt-[4px] leading-[1.4] flex items-center gap-[6px] animate-fadeIn"

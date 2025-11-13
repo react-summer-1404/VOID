@@ -5,6 +5,9 @@ const api_Base_URL = "https://sepehracademy.liara.run";
 
 const apiClient = axios.create({
   baseURL: api_Base_URL,
+  headers: {
+    'Content-Type': 'application/json'
+  }
 });
 
 apiClient.interceptors.request.use(

@@ -1,14 +1,37 @@
-import { Link ,useNavigate } from "react-router-dom"
+import { Link ,useNavigate,useParams } from "react-router-dom"
 import React from "react"
 import { Formik } from "formik"
 import { Form ,Field,ErrorMessage} from "formik"
 import * as Yup from "yup";
+import apiClient from "../../hook/interceptor"
 const validationSchema=Yup.object({
   cod:Yup.string().required("لطفا  کد تایید  را وارد کنید"),
   
 });
 const stepTow = () => {
   const navigate = useNavigate();
+  const {emile} = useParams();
+
+  const stepTwo =async(cod)=>{
+    try{
+       const RegTwo = await apiClient.post("https://sepehracademy.liara.run/Sign/VerifyMessage",{
+        gmail : emile,
+        verifyCode : cod    
+       });
+       alert("go to third part");
+        navigate("/Reg/StepThree")
+       
+    }catch(error){
+       alert("error");
+    }
+    
+ }
+
+
+
+
+
+
   return (
     <div dir="rtl" className=' m-auto w-[400px] h-[400px] 
     lg:m-[100px 50px] lg:w-[50%] lg:h-[300px] '>
@@ -22,8 +45,9 @@ const stepTow = () => {
    cod:''
  }}
  onSubmit ={(values)=>{
-  navigate("/Reg/StepThree")
-   console.log(values)
+   stepTwo(values.cod);
+  // console.log(values.cod);
+   
  }}
  validationSchema={validationSchema}
  >

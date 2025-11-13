@@ -4,12 +4,36 @@ import { Formik } from "formik"
 import { Form ,Field,ErrorMessage} from "formik"
 import * as Yup from "yup";
 import axios from "axios";
+import apiClient from "../../hook/interceptor"
 const validationSchema=Yup.object({
   gmail:Yup.string().required("لطفا   ایمیل را وارد کنید"),
   
 });
 const stepOwn = () => {
  const navigate = useNavigate();
+
+
+ const stepOne =async(emile)=>{
+    try{
+       const RegOne = await apiClient.post("https://sepehracademy.liara.run/Sign/SendVerifyMessage",{
+         gmail : emile ,
+           
+       });
+        navigate(`/Reg/StepTwo/${emile}`);
+        alert("got to part two")
+       
+    }catch(error){
+    if (error.response.status === 400) {
+      alert(error.response.data.message);
+    }
+    console.error(error.response);
+    }
+   
+
+ }
+ 
+
+
   return (
     <div dir="rtl" className=' mt-[150px] m-auto  w-[400px] h-[400px] 
     lg:m-[100px 50px] lg:w-[50%] lg:h-[300px] '>
@@ -23,8 +47,8 @@ const stepOwn = () => {
    gmail:''
  }}
 
- onSubmit ={async(values)=>{
-    navigate("/Reg/StepTwo") 
+ onSubmit ={(values)=>{
+    stepOne(values.gmail);
 }}
 
  validationSchema={validationSchema}
@@ -35,8 +59,8 @@ lg:h-[100%] '>
     <div className="flex items-center w-[100%] h-[20%] mt-[30px]  bg-[#4B4B4B14] rounded-lg">
     <div className="w-[10%] h-[35%] mr-2   bg-[url('/Call.png')] bg-no-repeat bg-[position:50%_40%] "></div>
     <Field className="w-[380px] h-[35px] outline-none  "
-        type="text"
-        placeholder="شماره همراه"
+        type="email"
+        placeholder="ایمیل "
         name="gmail"
         id="gmail"
       />

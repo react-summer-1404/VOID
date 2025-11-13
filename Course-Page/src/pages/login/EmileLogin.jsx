@@ -12,6 +12,7 @@ const validationSchema=Yup.object({
 });
 const EmileLogin = () => {
     const navigate = useNavigate();
+    
    const handleLogin = async (emile,pass) => {
            try {
         const response = await apiClient.post('https://sepehracademy.liara.run/Sign/Login', {
@@ -22,14 +23,13 @@ const EmileLogin = () => {
         
         localStorage.setItem('token', response.data.token);
         console.log('ورود موفقیت آمیز', response.data);
+
+        alert("ورود با موفقیت انجام شد")
+        navigate("/")
   
       } catch (error) {
         console.error('خطاورود', error);
         alert("ایمیل یا رمز عبور اشتباه است")
-      }finally{
-        alert("ورود با موفقیت انجام شد")
-        navigate("/")
-
       }
     };
    

@@ -3,6 +3,7 @@ import React from "react"
 import { Formik } from "formik"
 import { Form ,Field,ErrorMessage} from "formik"
 import * as Yup from "yup";
+import apiClient from "../../hook/interceptor"
 
 const validationSchema=Yup.object({
   email:Yup.string().required("لطفا  ایمیل خود را وارد کنید"),
@@ -10,6 +11,30 @@ const validationSchema=Yup.object({
 });
 const stepOwnres = () => {
   const navigate = useNavigate();
+
+
+ const stepOwn =async(emile)=>{
+    try{
+       const RegOwners = await apiClient.post("https://sepehracademy.liara.run/Sign/ForgetPassword",{
+         gmail : emile ,
+         baseUrl :"https://localhost:5173/resetpassword"
+           
+       });
+        navigate(`/ress/stepTowres/${emile}`);
+        alert("رمز جدید را وارد کنید")
+       
+    }catch(error){
+    console.error(error.response);
+    alert("این ایمیل وجود ندارد")
+    }
+   
+
+ }
+
+
+
+
+
   return (
         <div dir="rtl" className=' lg:mt-[80px] mt-[180px] flex flex-col items-center text-center lg:m-auto lg:w-[500px] h-[80%] lg:h-[330px] w-full   bg-white rounded-t-[50px] lg:shadow-md inset-shadow-sm lg:rounded-lg '>
 
@@ -22,8 +47,7 @@ const stepOwnres = () => {
         email:''
       }}
       onSubmit ={(values)=>{
-        navigate("stepTowres");
-        console.log(values)
+         stepOwn(values.email);
       }}
       validationSchema={validationSchema}
       >

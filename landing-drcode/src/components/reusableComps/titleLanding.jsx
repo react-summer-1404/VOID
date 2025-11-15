@@ -8,7 +8,7 @@ const TitleLanding = ({title , image1, image2, text}) => {
                 <h3 className='text-gray-900 text-xs'>{title}</h3>
                 <img src={image2} alt=">" />
             </div>
-            <h3 className='font-bold text-lg'>{text}</h3>
+            <h3 className='font-bold text-m md:text-lg'>{text}</h3>
         </div>
   )
 }

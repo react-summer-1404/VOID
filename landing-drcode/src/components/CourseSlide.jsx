@@ -113,7 +113,7 @@ const CourseSlide = () => {
         text="همه چیز را در دوره‌های ما یاد بگیرید"
       />
       
-      <div className='w-full px-8 overflow-hidden'>
+      <div className='w-full px-8 overflow-hidden hidden md:block'>
         <div 
           className='flex transition-transform duration-500 ease-in-out gap-10'
           style={{
@@ -139,12 +139,18 @@ const CourseSlide = () => {
         </div>
       </div>
 
-      <div dir='ltr' className='flex items-center justify-between px-16 py-6 w-screen'>
-        <button className='text-purple-700 px-6 py-2 rounded-lg border-2 border-purple-700 text-md hover:bg-purple-700 hover:text-white transition-colors'>
+        <div className="md:hidden flex flex-col gap-6 items-center">
+          {courses.slice(0, 3).map((course, index) => (
+            <CourseCard key={index} {...course} />
+          ))}
+        </div>
+
+      <div dir='ltr' className='relative md:flex items-center justify-between md:px-16 py-6 w-screen'>
+        <button className=' absolute right-4/12 text-purple-700 px-6 py-2 rounded-lg border-2 border-purple-700 text-md hover:bg-purple-700 hover:text-white transition-colors'>
           بیشتر ببین
         </button>
         
-        <div className='flex gap-2'>
+        <div className='md:flex hidden gap-2'>
           {Array.from({ length: totalDots }).map((_, index) => (
             <div
               key={index}
@@ -156,7 +162,7 @@ const CourseSlide = () => {
           ))}
         </div>
         
-        <div className='flex flex-wrap gap-3'>
+        <div className='md:flex flex-wrap gap-3 hidden'>
           <img 
             src={left} 
             alt="Previous" 

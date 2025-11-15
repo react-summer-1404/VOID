@@ -60,7 +60,7 @@ const TeachersSlideLanding = () => {
       <img src={polygon3} alt="" className='absolute left-35' />
       
       {/* GNX  */}
-      <div className="relative w-full overflow-hidden px-8" dir='ltr'>
+      <div className="hidden md:block relative w-full overflow-hidden px-8" dir='ltr'>
         <div 
           className="flex justify-center items-center gap-6 transition-transform duration-700 ease-in-out"
           style={{ transform: `translateX(${currentIndex * 0}px)` }}
@@ -82,8 +82,14 @@ const TeachersSlideLanding = () => {
           ))}
         </div>
       </div>
+
+      <div className='md:hidden flex flex-col gap-6 items-center'>
+          {teachers.slice(0,2).map ((ostad, id)=>(<TeacherCard key={id} {...ostad}/>
+        ))}
+      </div>
+      
       {/* gnx  */}
-      <div dir='ltr' className='flex gap-10 px-16 py-6 w-screen'>
+      <div dir='ltr' className='md:flex hidden gap-10 px-16 py-6 w-screen'>
         
         <div className='flex flex-wrap gap-3'>
           <img 

@@ -1,55 +1,59 @@
-import React from 'react'
-import vect from "../../assets/landPagePic/vect.png"
-import vect2 from "../../assets/landPagePic/vect2.png"
+import React, { useEffect, useState } from "react";
+import apiClient from "../../hook/interceptor";
 
-import bg1 from "../../assets/landPagePic/bg1.png";
-import bg2 from "../../assets/landPagePic/bg2.png";
-import bg3 from "../../assets/landPagePic/bg3.png";
-import NewsCard from './reusableComps/NewsCard';
-import TitleLanding from './reusableComps/TitleLanding'
+import vect from "../../assets/landPagePic/vect.png";
+import vect2 from "../../assets/landPagePic/vect2.png";
+import TitleLanding from "./reusableComps/titleLanding";
+import NewsCard from "./reusableComps/NewsCard";
 
+const News = ({nightMode}) => {
+  const [news, setNews] = useState([]);
+  // console.log("newsss",news)
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const res = await apiClient.get(
+          "/News?PageNumber=1&RowsOfPage=3&SortingCol=InsertDate&SortType=DESC"
+        );
 
-const news = () => {
+        const items = res.data.news || [];
+
+        setNews(items);
+      } catch (err) {
+        console.error("Error loading news:", err);
+      }
+    };
+
+    fetchNews();
+  }, []);
+
   return (
-    <section className='flex flex-col items-center gap-12 lg:w-[75%] m-auto mb-40 justify-center items-center m-50 relative'>
-       <TitleLanding
-          title= "با هر خبر ، از همه جلوتر"
-          image1={vect}
-          image2={vect2}
-          text="خبر های داغ دریچه ای به دنیای تازه ها"
-           />
+    <section className="flex flex-col items-center gap-12 lg:w-[75%] m-auto mb-40 relative">
+      <TitleLanding
+       nightMode={nightMode}
+        title="با هر خبر ، از همه جلوتر"
+        image1={vect}
+        image2={vect2}
+        text="خبر های داغ دریچه ای به دنیای تازه ها"
+      />
 
-        {/* GNX */}
-      
-<div className=" flex lg:flex-row flex-col  gap-10 justify-items-center">
-  <NewsCard
-    image={bg1}
-    title="ریکت جی اس چیست؟"
-    text="ری اکت (React) یک کتابخانه جاوا اسکریپت برای ساخت رابط کاربری بوده که ..."
-    author="علیرضا باقری"
-    views="۲۸۰"
-  />
-  <NewsCard
-    image={bg2}
-    title="ریکت جی اس چیست؟"
-    text="ری اکت (React) یک کتابخانه جاوا اسکریپت برای ساخت رابط کاربری بوده که ..."
-    author="علیرضا باقری"
-    views="۲۸۰"
-  />
-  <NewsCard
-    image={bg3}
-    title="ریکت جی اس چیست؟"
-    text="ری اکت (React) یک کتابخانه جاوا اسکریپت برای ساخت رابط کاربری بوده که ..."
-    author="علیرضا باقری"
-    views="۲۸۰"
-  />
-</div>
-
-        {/* gnx */}
-
-      
+      <div className="flex lg:flex-row flex-col gap-10 justify-items-center">
+        {news.map((item) => (
+          <NewsCard
+            key={item.id}
+            id={item.id}
+            title={item.title}
+            miniDescribe={item.miniDescribe}
+            image={item.currentImageAddress || null}
+            views={item.currentView}
+            rate={item?.newsRate?.avg}
+            author={item.addUserFullName}
+          
+          />
+        ))}
+      </div>
     </section>
-  )
-}
+  );
+};
 
-export default news
+export default News;

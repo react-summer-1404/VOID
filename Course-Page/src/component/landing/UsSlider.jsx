@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import vect3 from "../../assets/landPagePic/vect3.png";
 import vect4 from "../../assets/landPagePic/vect4.png";
-import TitleLanding from './reusableComps/TitleLanding';
+import TitleLanding from './reusableComps/titleLanding';//
 import cash from "../../assets/landPagePic/cash.png";
 import gap from "../../assets/landPagePic/gap.png";
 import paper from "../../assets/landPagePic/paper.png";
 import edu from "../../assets/landPagePic/edu.png";
 import UsDivCard from './reusableComps/usDivCard';
 import UsDivCard2 from './reusableComps/UsDivCard2';
-import UsSliderCard from './reusableComps/UsSliderCard';
+import UsSliderCard from './reusableComps/UsSliderCard';//
 import UsBg from "../../assets/landPagePic/ussliderbg.png";
 import Vector28 from "../../assets/landPagePic/Vector-28.png";
+import Squre10 from "../../assets/landPagePic/Squre10.png"
 
-const UsSlider = () => {
+const UsSlider = ({nightMode}) => {
     const slides = [
         {
             id: 1,
@@ -41,20 +42,20 @@ const UsSlider = () => {
     };
 
     return (
-        <section className='flex flex-col gap-30 justify-center items-center m-50 relative'>
+        <section className='hidden md:flex flex-col gap-30 justify-center items-center m-20 relative'>
             <TitleLanding
+                nightMode={nightMode}
                 title="خدمات حرفه ای ، کیفیت بی نظیر"
                 image1={vect3}
                 image2={vect4}
                 text="خدمات ما، راهی به سوی موفقیت شما"
             />
             <div className='flex gap-10'>
-                {/* GNX */}
-                <div className=' relative w-lg h-full'>
+                <div className=' relative w-lg h-full z-200'>
                     <div className='overflow-hidden h-full'>
                         <div 
                             className='flex  transition-transform duration-700 ease-in-out h-full'
-                            style={{ transform: `translateX(${currentSlide * -100}%)` }}
+                            style={{ transform: `translateX(${currentSlide * +100}%)` }}
                         >
                             {slides.map((slide) => (
                                 <div key={slide.id} className='min-w-full flex-shrink-0 h-full'>
@@ -111,6 +112,7 @@ const UsSlider = () => {
                     </div>
                 </div>
             </div>
+            <img src={Squre10} alt="" className="absolute right-75 top-130" />
         </section>
     );
 };

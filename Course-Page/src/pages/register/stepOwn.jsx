@@ -2,11 +2,13 @@ import { Link , useNavigate} from "react-router-dom"
 import React from "react"
 import { Formik } from "formik"
 import { Form ,Field,ErrorMessage} from "formik"
+import toast from "react-hot-toast"
 import * as Yup from "yup";
 import axios from "axios";
 import apiClient from "../../hook/interceptor"
 const validationSchema=Yup.object({
   gmail:Yup.string().required("لطفا   ایمیل را وارد کنید"),
+
   
 });
 const stepOwn = () => {
@@ -19,12 +21,15 @@ const stepOwn = () => {
          gmail : emile ,
            
        });
-        navigate(`/Reg/StepTwo/${emile}`);
-        alert("got to part two")
+       
+      //  setInterval(()=>{},1000)
+        toast("برای ایمیل شما کدی ارسال شده")
+         navigate(`/Reg/StepTwo/${emile}`)
+          setTimeout(()=>{window.location.reload()},1000);
        
     }catch(error){
     if (error.response.status === 400) {
-      alert(error.response.data.message);
+      toast(error.response.data.message);
     }
     console.error(error.response);
     }

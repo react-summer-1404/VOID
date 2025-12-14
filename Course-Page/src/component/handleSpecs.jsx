@@ -1,4 +1,4 @@
-import {useState} from "react"
+import {useState,useEffect} from "react"
 import PicIco from "../assets/icon/Education.png"
 import Slider from "rc-slider"
 import teach1 from "../assets/teacherAvatar/t1.png"
@@ -11,12 +11,15 @@ import Calender from "../assets/icon/calender.png"
 import News from "../assets/icon/news.png"
 import Load from "../assets/icon/load.png"
 import {useNavigate} from "react-router-dom"
+import apiClient from "../hook/interceptor"
+import axios from "axios"
+import toast from "react-hot-toast"
 
 // import "rc-slider/assets/index.css";
 
 
-const handleSpecs = ({cost,capicity,teacher})=>{
-
+const handleSpecs = ({cost,id,capicity,teacher,teacherId,studentCount,status,title,startDate,endDate})=>{
+    //  console.log(id)
     // const[Capicity,setCapicity] = useState(capicity);
     const navigate = useNavigate();
 
@@ -25,11 +28,38 @@ const handleSpecs = ({cost,capicity,teacher})=>{
     }
     
 
-
-    const handlecourseReserve = ()=>{
+   const [reserved,setReserved] = useState(false);
+const[teacherDetail,setTeacherDetail] = useState([]);
+  // console.log("id",teacherId)
+    const handlecourseReserve = async()=>{
+       try{
+      const fetchReserve = await apiClient.post("/CourseReserve/ReserveAdd",{
+         courseId: id,
+      });
+      setReserved(true);
       
-         alert("شما وارد دوره شدید")
+      toast.success("دوره با موفقیت رزرو شد")
+       }catch(error){
+         console.log("reserveError:",error);
+         toast.error("شما قبلا این دوره را رزرو کرده اید")
+         
+       }
+         
     }
+  useEffect(()=>{
+     const teacherDetaile= async()=>{
+           try{
+        const fechteacher = await axios.get(`https://sepehracademy.liara.run/Home/GetTeacherDetails?TeacherId=${teacherId}`);
+         const Data = fechteacher.data;
+           setTeacherDetail(Data);
+        }catch(error){
+          console.error("Error fetching teacher details:", error);
+        }
+      };
+      teacherDetaile();
+  },[teacher])
+    console.log("tea",teacherDetail)
+
 
     return(
         <div className="handleproductDetail  whitespace-nowrap bg-white  shadow-md  rounded-[20px]  h-[600px]
@@ -39,8 +69,8 @@ const handleSpecs = ({cost,capicity,teacher})=>{
 			مشخصات دوره 
 		   </div>	
 
-       <div className="w-[95%] h-[40px] flex justify-between place-items-center "><span className="flex items-center gap-1"> <img src={Student}/>تعداد دانشجویان</span> <span className="text-xs text-center border border-gray-400 rounded-full p-2 bg-gray-200">20</span></div>
-       <div className="w-[95%] h-[40px] flex justify-between place-items-center "><span className="flex items-center gap-1"> <img src={Category}/>دسته بندی</span> <span className="border border-gray-400 text-[#9B0EE1] rounded-[17px] p-1 pr-2 pl-2 bg-gray-200 ">فرانت اند</span></div>
+       <div className="w-[95%] h-[40px] flex justify-between place-items-center "><span className="flex items-center gap-1"> <img src={Student}/>تعداد دانشجویان</span> <span className="text-xs text-center border border-gray-400 rounded-full p-2 bg-gray-200">{studentCount}</span></div>
+       <div className="w-[95%] h-[40px] flex justify-between place-items-center "><span className="flex items-center gap-1"> <img src={Category}/>دسته بندی</span> <span className="border border-gray-400 text-[#9B0EE1] rounded-[17px] p-1 pr-2 pl-2 bg-gray-200 ">{title}</span></div>
        <div className="w-[95%] h-[40px] flex justify-between place-items-center ">
         <span className="flex items-center gap-1 w-[40%]"> 
         <img src={Zarfiat}/>ظرفیت دوره
@@ -77,20 +107,23 @@ const handleSpecs = ({cost,capicity,teacher})=>{
 
         </div>
 
-       <div className="w-[95%] h-[40px] text-[10px] lg:text-[12px]  flex justify-between place-items-center "><span className="flex items-center gap-1"> <img src={Calender}/>تاریخ شروع و پایان دوره</span> <div><span>1404/04/04</span>{"------>"}<span>1404/04/04</span></div></div>
-       <div className="w-[95%] h-[40px]  flex justify-between place-items-center "><span className="flex items-center gap-1"> <img src={Status}/>وضیعت دوره</span> <span className="border border-gray-400 text-[gray] rounded-[17px] p-1 pr-2 pl-2 bg-gray-200 flex items-center gap-1 "><img src={Load}/>در حال بارگذاری</span></div>
+       <div className="w-[95%] h-[40px] text-[10px] lg:text-[12px]  flex justify-between place-items-center "><span className="flex items-center gap-1"> <img src={Calender}/>تاریخ شروع و پایان دوره</span> <div><span>{startDate?.slice(0,10)}</span>{"------>"}<span>{endDate?.slice(0,10)}</span></div></div>
+       <div className="w-[95%] h-[40px]  flex justify-between place-items-center "><span className="flex items-center gap-1"> <img src={Status}/>وضیعت دوره</span> <span className="border border-gray-400 text-[gray] rounded-[17px] p-1 pr-2 pl-2 bg-gray-200 flex items-center gap-1 "><img src={Load}/>{status}</span></div>
        <div className="w-[95%] h-[40px]  flex justify-between place-items-center "><span className="flex items-center gap-1"> <img src={Price}/>قیمت</span><span className="flex flex-row gap-3 place-items-center h-[40px] items-center text-[15px]">{cost}<p className="text-purple-500">تومان</p></span></div>
         
-        <button onClick={handlecourseReserve} className="w-[95%] h-[45px] text-xl rounded-[12px] border bg-[#9B0EE1] text-white mt-1">شرکت در دوره</button>
+        <button onClick={handlecourseReserve} className={`w-[95%] h-[45px] text-xl rounded-[12px] border  text-white hover:bg-[black] ${reserved ? "bg-black":"bg-[#9B0EE1]"} mt-1`}>
+          شرکت در دوره
+
+        </button>
 
         <div className="w-[95%] h-[40px] flex justify-between mt-3 place-items-center border-b border-t border-[#eee] "><span className="text-[gray]">مشخصات استاد<img/></span><span onClick={()=>teacherPageHandler()} className="cursor-pointer text-[blue]">پروفایل مدرس {">"}</span></div>
         <div className="flex flex-row  place-items-center  w-[95%] h-[60px]">
-          <img src={teach1} className="flex rounded-[50%]  w-[18%] h-[98%]"/>
+          <img src={teacherDetail.pictureAddress || teach1} className="flex rounded-[50%]  w-[18%] h-[98%]"/>
           <div className="flex flex-col justify-between  w-[61%] h-full">
           <p className=" h-[40%] flex items-center text-[17px] mr-1"><img className="w-[22px] h-[18px] mt-1 pl-1" src={PicIco}/>{teacher}</p>
-          <p className=" h-[40%] text-[gray] mr-1">توضیحات استاد</p>
+          <p className=" h-[40%] text-[gray] mr-1">{teacherDetail.linkdinProfileLink}</p>
           </div>
-          <span className="flex items-center w-[20%] gap-1 mt-7"><img src={News}/>12 دوره</span>
+          <span className="flex items-center w-[20%] gap-1 mt-7"><img src={News}/>0 دوره</span>
           
           </div>
 

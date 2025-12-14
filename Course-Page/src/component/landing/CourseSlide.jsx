@@ -1,74 +1,38 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import vect from "../../assets/landPagePic/vect.png"
 import vect2 from "../../assets/landPagePic/vect2.png"
-import TitleLanding from './reusableComps/TitleLanding'
+import TitleLanding from './reusableComps/titleLanding'
 import CourseCard from './reusableComps/CourseCard'
 import bg4 from '../../assets/landPagePic/bg4.png'
 import left from '../../assets/landPagePic/left.png'
 import right from '../../assets/landPagePic/right.png'
-import {useNavigate} from "react-router-dom"
-
-const CourseSlide = () => {
+import { useNavigate } from "react-router-dom"
+import apiClient from "../../hook/interceptor"
+import Squre3 from "../../assets/landPagePic/Squre3.png"
+const CourseSlide = ({nightMode}) => {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const courses = [
-    {
-      image: bg4,
-      title: "ریکت جی اس",
-      number: "20",
-      teacher: "استاد پورمرادی",
-      date: "1404/02/14",
-      price: "2,500,000"
-    },
-    {
-      image: bg4,
-      title: "ریکت جی اس",
-      number: "20",
-      teacher: "استاد پورمرادی",
-      date: "1404/02/14",
-      price: "2,500,000"
-    },
-    {
-      image: bg4,
-      title: "ریکت جی اس",
-      number: "20",
-      teacher: "استاد پورمرادی",
-      date: "1404/02/14",
-      price: "2,500,000"
-    },
-    {
-      image: bg4,
-      title: "ریکت جی اس",
-      number: "20",
-      teacher: "استاد پورمرادی",
-      date: "1404/02/14",
-      price: "2,500,000"
-    },
-    {
-      image: bg4,
-      title: "ریکت جی اس",
-      number: "20",
-      teacher: "استاد پورمرادی",
-      date: "1404/02/14",
-      price: "2,500,000"
-    },
-    {
-      image: bg4,
-      title: "ریکت جی اس",
-      number: "20",
-      teacher: "استاد پورمرادی",
-      date: "1404/02/14",
-      price: "2,500,000"
-    },
-    {
-      image: bg4,
-      title: "ریکت جی اس",
-      number: "20",
-      teacher: "استاد پورمرادی",
-      date: "1404/02/14",
-      price: "2,500,000"
-    },
-  ]
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await apiClient.get(
+          "/Home/GetCoursesWithPagination?PageNumber=1&RowsOfPage=10&SortingCol=Active&SortType=DESC&TechCount=0"
+        );
+        
+        console.log("api data:", response.data);
+
+        setCourses(response.data.courseFilterDtos);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, []);
 
   const getSlidesPerView = () => {
     if (typeof window === 'undefined') return 3.5
@@ -79,7 +43,7 @@ const CourseSlide = () => {
 
   const [slidesPerView, setSlidesPerView] = useState(getSlidesPerView())
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleResize = () => {
       setSlidesPerView(getSlidesPerView())
     }
@@ -90,31 +54,32 @@ const CourseSlide = () => {
   const maxIndex = Math.max(0, courses.length - slidesPerView)
 
   const handleNext = () => {
-    setCurrentIndex((prev) => {
-      if (prev >= maxIndex) return 0
-      return prev + 1
-    })
+    setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1))
   }
 
   const handlePrev = () => {
-    setCurrentIndex((prev) => {
-      if (prev <= 0) return maxIndex
-      return prev - 1
-    })
+    setCurrentIndex((prev) => (prev >=  maxIndex ? 0 : prev + 1))
   }
 
   const totalDots = maxIndex + 1
 
   const navigate = useNavigate();
-   const more = ()=>{
-      navigate("/contentPage/courseContent")
-   }
+  const more = () => {
+    navigate("/contentPage/courseContent")
+  }
+
+  if (loading) return <p>Loading courses...</p>
 
   return (
-    <section className='flex flex-col gap-12 justify-center items-center m-20 relative'>
-     
-      
-      <div className='w-full px-8 overflow-hidden'>
+    <section className='flex flex-col w-[90%] mt-20 m-auto gap-12 justify-center items-center m-20 relative'>
+      <TitleLanding nightMode={nightMode}
+        title="با هر دوره، یک قدم جلوتر"
+        image1={vect}
+        image2={vect2}
+        text="همه چیز را در دوره‌های ما یاد بگیرید"
+      />
+
+      <div className='w-full  px-8 overflow-hidden'>
         <div 
           className='flex transition-transform duration-500 ease-in-out gap-10'
           style={{
@@ -128,24 +93,28 @@ const CourseSlide = () => {
               style={{ width: `calc(${100 / slidesPerView}% - ${(10 * (slidesPerView - 1)) / slidesPerView}px)` }}
             >
               <CourseCard
-                image={course.image}
+                 Id={course.courseId}
+                 key={course.courseId}
+                image={course.imageAddress || "/cover3.png"}
                 title={course.title}
-                number={course.number}
-                teacher={course.teacher}
-                date={course.date}
-                price={course.price}
+                teacher={course.teacherName}
+                date={course.startTime}
+                price={course.cost}
               />
             </div>
           ))}
         </div>
       </div>
 
-      <div dir='ltr' onClick={more}  className='flex items-center justify-between px-16 py-6 w-screen'>
-        <button className='text-purple-700 px-6 py-2 rounded-lg border-2 border-purple-700 text-md hover:bg-purple-700 hover:text-white transition-colors'>
+      <div dir='ltr' className='flex  items-center justify-between px-16 py-6 w-screen'>
+        <button 
+          onClick={more} 
+          className='text-purple-700 mr-5 px-6 py-2 rounded-lg border-2 border-purple-700 text-md hover:bg-purple-700 hover:text-white transition-colors'
+        >
           بیشتر ببین
         </button>
         
-        <div className='flex gap-2'>
+        <div dir="rtl" className='flex gap-2'>
           {Array.from({ length: totalDots }).map((_, index) => (
             <div
               key={index}
@@ -172,6 +141,7 @@ const CourseSlide = () => {
           />
         </div>
       </div>
+      <img src={Squre3} alt="" className="absolute -left-20 -top-10 md:block hidden" />
     </section>
   )
 }

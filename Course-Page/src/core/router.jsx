@@ -22,7 +22,10 @@ import NewsDetail from "../contentpage/newsPage/newsDetail.jsx"
 ///////////////////////////////////////////////////////////////////
 import DashHome from "../contentpage/dashboardPage/dashHome.jsx"
 import Dashboard from "../contentpage/dashboardPage/dashPart/dashboard.jsx"
-import DashCourse from "../contentpage/dashboardPage/dashPart/dashcourse.jsx"
+import DashCourse from "../contentpage/dashboardPage/dashPart/dashCourse.jsx"//
+import FavCourse from "../contentpage/dashboardPage/dashPart/FavCourse.jsx"
+import MyReserve from "../contentpage/dashboardPage/dashPart/MyReserve.jsx"
+import FavNews from "../contentpage/dashboardPage/dashPart/FavNews.jsx"
 import Profile from "../contentpage/dashboardPage/dashPart/profile.jsx"
  import Info from "../contentpage/dashboardPage/dashPart/profilePart/Information.jsx"
  import Address from "../contentpage/dashboardPage/dashPart/profilePart/address.jsx"
@@ -63,7 +66,7 @@ const router = createBrowserRouter([
       { path: "ress", element: <AuthLayoutRespass />, children: [
       { index: true, element: <StepOwnres /> },
       { path: "StepOwnres", element: <StepOwn /> },
-      { path: "StepTowres/:emile", element: <StepTowres /> },
+      { path: "StepTowres/:code", element: <StepTowres /> },
        ],
      },
 
@@ -71,6 +74,9 @@ const router = createBrowserRouter([
       {index:true,element:<Dashboard/>},
       {path:"dash",element:<Dashboard/>},
       {path:"dashcourse",element:<DashCourse/>},
+      {path:"FavCourse",element:<FavCourse/>},
+      {path:"MyReserve",element:<MyReserve/>},
+      {path:"FavNews",element:<FavNews/>},
 
       {path:"profile",element:<Profile/>, children:[
          {index:true,element:<Info/>},

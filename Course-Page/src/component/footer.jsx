@@ -5,32 +5,31 @@ import footerbg from '../assets/landPagePic/footerbg.png'
 import { MdEmail } from "react-icons/md";
 import {FaInstagram,FaTelegramPlane,FaWhatsapp,FaPhoneAlt, FaLocationArrow, FaFacebook,} from "react-icons/fa";
 import logo2 from "../assets/landPagePic/Logo2.png"
+import InstaInaBtn from "../component/LandingCompsSmall/InstaInaBtn";
+import {useNavigate} from "react-router-dom"
 
 
 const Footer = () => {
+  const navigate = useNavigate();
   return (
 
     <div className='w-full z-0 relative lg:h-[235px]'>
              
-         <img src={polygon1} className=' absolute lg:right-[-35px] right-[-60px] lg:bottom-[35px] bottom-[460px]  -z-1 h-[325px] w-[300px]'></img>
-          <img src={polygon2} className=' absolute lg:right-[70px] right-[-80px] lg:bottom-[5px] bottom-[420px] -z-2 h-[325px] w-[300px]'></img>
+        <img src={polygon1} className=' absolute -z-1 -top-30 right-0'></img>
+      <img src={polygon2} className=' absolute  -top-10 right-0 -z-2'></img>
           
-    <div className=" text-white pt-10 h-full flex flex-col md:flex-row lg:justify-evenly items-center lg:items-start gap-10 "
+    <div className=" text-white pt-10 h-full flex flex-col lg:flex-row lg:justify-evenly items-center lg:items-start gap-10 "
      style={{ backgroundImage: `url(${footerbg})` }} >
 
 
-        <div className='relative lg:mr-15 ml-80 lg:ml-10  z-50  order-[1]'>
+        <div className='lg:w-[6%] w-full relative lg:h-full  '>
       
-        <div className=' absolute flex flex-col justify-center items-center gap-9 mt-0 text-2xl -top-23'>
-                    <FaFacebook className="cursor-pointer hover:text-pink-300 transition" />
-          <FaInstagram className="cursor-pointer hover:text-blue-300 transition" />
-          <FaTelegramPlane className="cursor-pointer hover:text-green-300 transition" />
-          <FaWhatsapp className="cursor-pointer hover:text-green-300 transition" />
-
+        <div className=' absolute -top-5 lg:right-[60%] right-[8%] flex flex-col justify-center items-center gap-9  text-2xl ' >
+                <InstaInaBtn />
         </div>
         </div>
 
-        <div className="text-center order-[4] lg:pb-0 pb-30 z-50 lg:order-[2] flex flex-col mr-20 cursor-pointer" dir='ltr' >
+        <div className="text-center order-[4] lg:w-[15%] lg:pb-0 pb-30 z-50 lg:order-[2] flex flex-col mr-20 cursor-pointer" dir='ltr' >
            <h3 className="font-semibold mb-3 text-lg -mr-35">ارتباط با ما</h3>
            <ul className="space-y-2 text-sm">
           <li className="flex items-center justify-end gap-2">
@@ -47,7 +46,7 @@ const Footer = () => {
         
 
 
-        <div className="text-center flex w-[80%]  order-[2] flex-col items-center flex-1 gap-3">
+        <div className="text-center flex w-[50%]  order-[2] flex-col items-center flex-1 gap-3">
           <img src={logo2} alt="" />
           <p className="mb-4 text-sm">همین حالا اقدام کن و به ما ملحق شو</p>
           <div className="flex items-center bg-white rounded-lg overflow-hidden w-full max-w-xs">
@@ -67,10 +66,10 @@ const Footer = () => {
             <div key={col} className=' items-center flex flex-col w-[40%]'>
               <h3 className="font-semibold mb-4 text-lg">لینک ها</h3>
               <ul className="space-y-2 text-sm">
-                <li>دوره ها</li>
-                <li>اساتید برتر</li>
-                <li>خبرهای داغ</li>
-                <li>اساتید برتر</li>
+                <li onClick={()=> navigate("/contentPage/courseContent")}>دوره ها</li>
+                <li onClick={()=> navigate("/contentPage/teacherContent")}>اساتید برتر</li>
+                <li onClick={()=> navigate("/contentPage/newsContent")}>خبرهای داغ</li>
+                <li onClick={()=> navigate("/contentPage/teacherContent")}>اساتید برتر</li>
               </ul>
             </div>
         ))}

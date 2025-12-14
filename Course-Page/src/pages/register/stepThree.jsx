@@ -2,6 +2,7 @@ import React from "react"
 import { useNavigate } from "react-router-dom"
 import { Formik } from "formik"
 import { Form ,Field,ErrorMessage} from "formik"
+import toast from "react-hot-toast"
 import * as Yup from "yup";
 import apiClient from "../../hook/interceptor"
 const validationSchema=Yup.object({
@@ -33,13 +34,15 @@ const handleThree =async(Email,phone,pass)=>{
       
       if (token) {
         localStorage.setItem('token', token);
-        alert("ثبت نام با موفقیت انجام شد");
-        navigate('/authLayout');
+        toast("ثبت نام با موفقیت انجام شد")
+        setInterval(()=>{navigate('/authLayout')},1000);
+         setTimeout(()=>{window.location.reload()},1500);
       }
     }
       
     } catch (error) { 
-    alert("خطا در ثبت نام");
+    
+    toast("خطا در ثبت نام")
   }
 };
  

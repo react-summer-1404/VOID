@@ -4,6 +4,9 @@ import { Formik } from "formik"
 import { Form ,Field,ErrorMessage} from "formik"
 import * as Yup from "yup";
 import apiClient from "../../hook/interceptor"
+import { useContext } from "react"
+import { AuthContext } from "../../hook/authContext"
+import toast from "react-hot-toast";
 
 const validationSchema=Yup.object({
   phone:Yup.string().required("لطفا شماره تماس را وارد کنید"),
@@ -12,27 +15,39 @@ const validationSchema=Yup.object({
 });
 const PhoneLogin = () => {
  const navigate = useNavigate();
-
+    
+  const {login} = useContext(AuthContext);
 
      // const[Product,setProduct] = useState([]);
       
-         const handleLogin = async (phone,pass) => {
+         const handleLogin = async (phone,pass,rememberMee) => {
            try {
         const response = await apiClient.post('https://sepehracademy.liara.run/Sign/Login', {
            phoneOrGmail: phone,
            password: pass,
-           rememberMe: true
+           rememberMe: rememberMee
         });
-        
+        //  console.log(rememberMee)
         localStorage.setItem('token', response.data.token);
         console.log('ورود موفقیت آمیز', response.data);
 
-         alert("ورود با موفقیت انجام شد")
-        navigate("/")
+        
+         const userData = { 
+           phoneOrGmail: phone,
+           password: pass,
+           rememberMe: rememberMee
+          };
+
+      login(response.data.token, userData);
+
+        //  alert("ورود با موفقیت انجام شد")
+        toast.success("به دکتر تل خوش آمدید!😍");
+        setInterval(()=>{navigate("/")},1000);
+        setTimeout(()=>{window.location.reload()},1500);
   
       } catch (error) {
         console.error('خطاورود', error);
-         alert("شماره تلفن  و رمز عبور اشتباه است")
+         toast("شماره تلفن یا رمز عبور اشتباه است")
       }
     };
     
@@ -49,9 +64,10 @@ const PhoneLogin = () => {
 <Formik initialValues={{
   phone:'',
   pass:'',
+  remember:false,
 }}
 onSubmit ={(values)=>{
-   handleLogin(values.phone,values.pass);
+   handleLogin(values.phone,values.pass,values.remember);
 }}
 validationSchema={validationSchema}
 >
@@ -91,12 +107,13 @@ lg:h-[100%]'>
          component={"p"}
         />
     <div className=" mt-[10px] w-[100%] h-[10%] ">
-    <input  className=" float-right w-[16px] h-[16px]  "
+    <Field  className=" float-right w-[16px] h-[16px]  "
           type="checkbox"
-          id="save"
+          id="remember"
+          name="remember"
 
         />
-        <label className=" float-right text-[12px] mr-1" id="save">مرا به خاطر بسپار</label>
+        <label className=" float-right text-[12px] mr-1" id="remember">مرا به خاطر بسپار</label>
         <Link to={"/ress"} className="float-left cursor-pointer text-[#9B0EE1] underline">فراموشی رمز</Link>
     </div>
         <button 

@@ -7,14 +7,22 @@ import NightModeIco from "../assets/navIco/NightMode.png"
 import SearchIco from "../assets/icon/SearchIcon.png"
 import Profile from "../assets/icon/Profile.png"
 import Avatar from "../assets/navIco/avatar.png"
+import Calen from "../assets/icon/Newss.png"
 import {Link} from "react-router-dom"
 
-function Navbar() {
+import{useContext} from "react"
+import { AuthContext } from "../hook/authContext";
+
+
+function Navbar({setNightMode,nightMode}) {
+
+    const {token} = useContext(AuthContext);
+
   return (
     <>
     <nav className=" w-[85%]  h-[20px] hidden lg:block  top-0 right-0 left-0  flex items-center justify-between mt-5 mb-10 z-500 rounded "></nav>
 
-    <nav className=" relative lg:fixed m-auto  bg-transparent lg:w-[86%] w-full top-0 backdrop-blur p-2 rounded-[15px] right-0 left-0  flex items-center  justify-between lg:flex-row flex-row-reverse mt-5 mb-10 z-50 rounded ">
+    <nav className=" relative lg:fixed m-auto  bg-transparent lg:w-[86%] w-full top-0 backdrop-blur p-2 rounded-[15px] right-0 left-0  flex items-center  justify-between lg:flex-row flex-row-reverse mt-5 mb-10 z-500 rounded ">
       
   <div className="lg:w-32 w-[70%]">
     <img src={logo} alt="Logo" className="w-32 h-auto" />
@@ -40,10 +48,14 @@ function Navbar() {
         </ul>
         
         <div className="flex flex-row h-full items-center">
-         <Link to="/dashboard" className=" w-[50px] h-[50px] rounded-full cursor-pointer"><img src={Avatar} className="w-full h-full" /></Link>      
-        <Link to="/authLayout"><button  className=" lg:block hidden bg-purple-600 text-white lg:px-4 px-2 lg:ml-0 mr-2 ml-5 py-2 rounded-lg hover:bg-purple-700 transition-all cursor-pointer">
-          ورود / ثبت‌نام
-        </button></Link>
+        {token ?(
+         <Link to="/dashboard" className=" w-[50px] h-[50px] rounded-full cursor-pointer"><img src={Avatar} className="w-full h-full" /></Link>  
+        ):( 
+          <Link to="/authLayout"><button  className="  bg-purple-600 text-white lg:px-4 px-2 lg:ml-0 mr-2 ml-5 py-2 rounded-lg hover:bg-purple-700 transition-all cursor-pointer">
+          ورود / ثبت‌ نام
+          </button></Link>
+          ) }
+
         </div>
         
         
@@ -64,9 +76,9 @@ function Navbar() {
           <Link to="/contentPage/courseContent"><li className="relative   after:content-[''] after:absolute after:-bottom-1 after:right-0 after:w-0 after:h-[2px] after:bg-[white] hover:after:w-full after:transition-all after:duration-300">
             <img src={NewsIco} />
           </li></Link>
-          <Link to="/contentPage/newsContent"><li className="relative  after:content-[''] after:absolute after:-bottom-1 after:right-0 after:w-0 after:h-[2px] after:bg-[white] hover:after:w-full after:transition-all after:duration-300">
+          <li onClick={()=> setNightMode(!nightMode)} className="relative  after:content-[''] after:absolute after:-bottom-1 after:right-0 after:w-0 after:h-[2px] after:bg-[white] hover:after:w-full after:transition-all after:duration-300">
             <img src={NightModeIco} />
-          </li></Link>
+          </li>
         </ul>
     </nav>
 

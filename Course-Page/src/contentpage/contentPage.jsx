@@ -19,8 +19,10 @@ const coursePage = ()=>{
  
     const[nightMode,setNightMode] = useState(false);
 
+//  className={`${nightMode ? "bg-[black]/100": "bg-[#F5F5F5]"}`}
+
     return(
-        <div className={`${nightMode ? "bg-[black]/100": "bg-[#F5F5F5]"}`}>
+        <div  className="bg-[#F5F5F5]">
 
             <img src={Squre2} className="absolute  top-[500px] left-[0]"/>
             <img src={Squre3} className="absolute  top-[800px] right-[0]"/>
@@ -30,7 +32,7 @@ const coursePage = ()=>{
          />
         <Header/>
          <div>
-            <Outlet setNightMode={setNightMode} nightMode={nightMode}/>
+            <Outlet/>
          </div >
         <Footer/>
         </div>

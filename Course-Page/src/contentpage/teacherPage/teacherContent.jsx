@@ -4,8 +4,9 @@ import T1 from "../../assets/teacherAvatar/t1.png"
 import T2 from "../../assets/teacherAvatar/t2.png"
 import T3 from "../../assets/teacherAvatar/t3.png"
 import T4 from "../../assets/teacherAvatar/t4.png"
+import Linkdin from "../../assets/icon/linkdin.png"
 import axios from "axios"
-
+import TeachDetail from "../../component/teacher/teacherDetail"
 const teacherContent = ({}) =>{  
 
      const [filterBt,setFilterBt] = useState(true);
@@ -18,26 +19,11 @@ const teacherContent = ({}) =>{
         {id:1 , name : "بر اساس دوره"},
         {id:2 , name : "بر اساس مقاله"},
 	 ]
-        const[teacherList,setTeacherList] = useState([]);
-     const Teacher =[
-        {id:1,name:"استاد بحر العلوم",title:"مدرس اصلی پژوهشگاه",courseCount:10,articale:5,img:T1},
-        {id:2,name:"استاد بحر العلوم",title:"مدرس اصلی پژوهشگاه",courseCount:8,articale:2,img:T2},
-        {id:3,name:"استاد بحر العلوم",title:"مدرس اصلی پژوهشگاه",courseCount:2,articale:3,img:T3},
-        {id:4,name:"استاد بحر العلوم",title:"مدرس اصلی پژوهشگاه",courseCount:5,articale:1,img:T4},
-        {id:5,name:"استاد بحر العلوم",title:"مدرس اصلی پژوهشگاه",courseCount:4,articale:4,img:T1},
-        {id:6,name:"استاد بحر العلوم",title:"مدرس اصلی پژوهشگاه",courseCount:9,articale:6,img:T2},
-        {id:7,name:"استاد بحر العلوم",title:"مدرس اصلی پژوهشگاه",courseCount:16,articale:5,img:T3},
-        {id:8,name:"استاد بحر العلوم",title:"مدرس اصلی پژوهشگاه",courseCount:1,articale:8,img:T4},
-        {id:9,name:"استاد بحر العلوم",title:"مدرس اصلی پژوهشگاه",courseCount:8,articale:9,img:T1},
-        {id:10,name:"استاد بحر العلوم",title:"مدرس اصلی پژوهشگاه",courseCount:12,articale:2,img:T2},
-        {id:11,name:"استاد بحر العلوم",title:"مدرس اصلی پژوهشگاه",courseCount:13,articale:8,img:T3},
-        {id:12,name:"استاد بحر العلوم",title:"مدرس اصلی پژوهشگاه",courseCount:14,articale:5,img:T4},
-        {id:13,name:"استاد بحر العلوم",title:"مدرس اصلی پژوهشگاه",courseCount:15,articale:6,img:T1},
-        {id:14,name:"استاد بحر العلوم",title:"مدرس اصلی پژوهشگاه",courseCount:20,articale:3,img:T2},
-        {id:15,name:"استاد بحر العلوم",title:"مدرس اصلی پژوهشگاه",courseCount:5,articale:10,img:T3},
-        {id:16,name:"استاد بحر العلوم",title:"مدرس اصلی پژوهشگاه",courseCount:10,articale:11,img:T4},
-        
-     ]
+       
+
+      const[teacherList,setTeacherList] = useState([]);
+      const[teacherDetail,setTeacherDetail] = useState([]);
+      const[showDetail,setShowTeacherDetail] = useState('');
 
      useEffect(()=>{
         const teacherll= async()=>{
@@ -45,22 +31,31 @@ const teacherContent = ({}) =>{
         const fechteacher = await axios.get("https://sepehracademy.liara.run/Home/GetTeachers");
          const Data = fechteacher.data;
            setTeacherList(Data);
-        }finally{
-
-        }   
+        }catch(error){
+          console.error("Error fetching teachers:", error);
+        }
       };
-
-      teacherll();
-
-       
+      teacherll(); 
      },[]);
 
-      console.log(teacherList)
+      
+        const teacherDetaile= async(showDetail)=>{
+           try{
+        const fechteacher = await axios.get(`https://sepehracademy.liara.run/Home/GetTeacherDetails?TeacherId=${showDetail}`);
+         const Data = fechteacher.data;
+           setTeacherDetail(Data);
+        }catch(error){
+          console.error("Error fetching teacher details:", error);
+        }
+      };
+
+
      
-
-
-     const SortCourse = [...Teacher].sort((a, b) => {
-      if (filters.sortBy === "بر اساس دوره") return b.courseCount - a.courseCount;
+     
+      
+      /////////////////////
+     const SortTeacher = [...teacherList].sort((a, b) => {
+      if (filters.sortBy === "بر اساس دوره") return b.courseCounts - a.courseCounts;
       if (filters.sortBy === "بر اساس مقاله") return b.articale - a.articale;
       return 0;
     });
@@ -70,26 +65,26 @@ const teacherContent = ({}) =>{
          setFilters({...filters, sortBy :newSort});
         };
 
-     // تعداد محصول در هر صفحه
+    
      
      const [currentPage, setCurrentPage] = useState(1);
      const itemsPerPage = 12;  
    
-  //محسابه تعداد محصول در هر صفحه
+ 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   
-  // چک کن که courseData آرایه باشه و پر باشه
-const currentItems = Array.isArray(SortCourse) && SortCourse.length > 0
-  ? SortCourse.slice(indexOfFirstItem, indexOfLastItem) 
+ 
+const currentItems = Array.isArray(SortTeacher) && SortTeacher.length > 0
+  ? SortTeacher.slice(indexOfFirstItem, indexOfLastItem) 
   : [];
 
-// تعداد کل صفحات
-const totalPages = Array.isArray(SortCourse) && SortCourse.length > 0
-  ? Math.ceil(SortCourse.length / itemsPerPage)
+
+const totalPages = Array.isArray(SortTeacher) && SortTeacher.length > 0
+  ? Math.ceil(SortTeacher.length / itemsPerPage)
   : 0;  
 
-  // تابع برای تغییر صفحه
+
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
     window.scrollTo({ top: 100, behavior:"smooth"});
@@ -146,18 +141,27 @@ const totalPages = Array.isArray(SortCourse) && SortCourse.length > 0
 
          <div className="teacherBox mt-5 w-full flex lg:flex-row lg:flex-wrap flex-col items-center gap-[15px] ">
             {currentItems.map((teach)=>(
-                <div key={teach.id} className="shadow-md flex flex-row items-center lg:w-[24%] w-[80%] h-[130px] rounded-[15px]">
-                    <img className=" mr-4 ml-1 h-[70%] w-[30%] rounded-full" src={teach.img} />
-                    <div className=" flex flex-wrap gap-[10px]  h-[80%] w-[60%]">
-                        <span className=" font-medium text-[14px]">{teach.name}</span>
-                        <span className=" text-[gray]/50 text-[12px]">{teach.title}</span>
-                        <button className=" text-[blue]/50 text-[12px] bg-[gray]/10 px-2 rounded-[10px]">پروفایل استاد</button>
-
+                <div key={teach.teacherId} className=" relatvie shadow-md flex flex-row items-center lg:w-[24%] w-[80%] h-[130px] rounded-[15px]">
+                    <img className=" mr-4 ml-1 h-[70%] w-[30%] rounded-full" src={teach.pictureAddress} />
+                    <div className="relative  h-[80%]">
+                        <span className=" font-medium m-auto h-[30%] text-right  text-[14px]">{teach.fullName}</span>
+                        <p className=" text-[gray]/50 h-[30%] text-[9px] lg:text-[12px]"><img className="w-[15px] h-[15px] inline" src={Linkdin} />{teach.linkdinProfileLink}</p>
+                        <button onClick={()=>{teacherDetaile(teach.teacherId);setShowTeacherDetail(teach.teacherId)}} className=" text-[blue]/50 h-[30%] w-[100px] text-[12px] bg-[gray]/10 px-2 rounded-[10px]">پروفایل استاد</button>
                     </div>
-
+                  {showDetail == teach.teacherId && ( 
+                    <TeachDetail
+                      tImage={teacherDetail.pictureAddress}
+                      tName = {teacherDetail.fullName}
+                      title={(teacherDetail.departaman?.name)}
+                      setShowTeacherDetail={setShowTeacherDetail}
+                      courseCount={teach.courseCounts}
+                    />
+            
+               )}
                 </div>
             ))}
 
+        
          </div>
 
 

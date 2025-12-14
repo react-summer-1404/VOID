@@ -17,6 +17,8 @@ import "../../assets/style/tailwinds/tailwindSt(productCard).css"
 import Favorite from "../../assets/icon/favorite.png"
 import apiClient from "../../hook/interceptor.js"
 
+import { toast } from "react-hot-toast";
+
 const courseDetail = () => {
   
   const[showMore,setShowMore] = useState(false);
@@ -38,7 +40,7 @@ const courseDetail = () => {
    useEffect(() => {
     const fetchRelated = async () => {
       try {
-        const response = await axios.get("https://sepehracademy.liara.run/Home/GetCoursesWithPagination?PageNumber=1&RowsOfPage=10&SortingCol=active&SortType=desc&TechCount=0");
+        const response = await axios.get("https://sepehracademy.liara.run/Home/GetCoursesWithPagination?PageNumber=1&RowsOfPage=10&SortingCol=Active&SortType=DESC&TechCount=0");
         const data = await response.data.courseFilterDtos;
         setProduct(data);
       } catch (error) {
@@ -49,21 +51,28 @@ const courseDetail = () => {
     fetchRelated();
   }, [id]);
 
-  // console.log(Product)
-  
- 
-   
-  //selectedProduct
-    useEffect(()=>{
-      const foundCourse = Product.find((el) => String(el.courseId) === String(id));
-      setSelectedCourse(foundCourse);
+   useEffect(() => {
+    const fetchRelated = async () => {
+      try {
+        const response = await axios.get(`https://sepehracademy.liara.run/Home/GetCourseDetails?CourseId=${id}`);
+        const data = await response.data;
+        setSelectedCourse(data);
+      } catch (error) {
+        console.error('خطا:', error);
+      }
       
-    },[Product,id])   
+    }
+   
+    fetchRelated();
+  }, [id]);
 
-    if(selectedCourse)
+  // console.log(Product)
+  useEffect(()=>{
     console.log("selectedCourse",selectedCourse);
-     else{console.log("وجود ندارد")}
-    
+  },[selectedCourse])
+   
+ 
+  
   //relatedProduct
   useEffect(()=>{
     
@@ -78,89 +87,187 @@ const courseDetail = () => {
    const [Rated, setRated] = useState(false); 
     const[like,setLike] = useState(false);
     const[dissLike,setDissLike] = useState(false);
+
  useEffect(() => {
-  setRating(selectedCourse?.courseRate?.avg ?? 0);
+  setRating(selectedCourse?.currentRate ?? 0);
 }, [selectedCourse]);
+
+/////////////////////fav
+  const [favStatus, setFavStatus] =  useState(false);
+
+  useEffect(() => {
+  const ratedUserStr = localStorage.getItem('rateUser');
+  // const rateNumStr = localStorage.getItem('ratenum');
+  const FavStr = localStorage.getItem('fav');
   
-////////////////rating
-  const handleRating = async (rate) => {
-    if (Rated) {
-        console.log('امتیاز داده شده');
-    return;
-     }
-     else{
-  try {
-    const courseRate = await apiClient.post(
-      `https://sepehracademy.liara.run/Course/SetCourseRating?CourseId=${selectedCourse.courseId}&RateNumber=${rate}`
-    );
+  const ratedUser = ratedUserStr ? JSON.parse(ratedUserStr) : {};
+  // const rateNum = rateNumStr ? JSON.parse(rateNumStr) : {};
+  const Fav = FavStr ? JSON.parse(FavStr) : {};
+  
+  if (id && ratedUser[id]) {
+    setRated(true);
     
-    setRating(rate);
-     setRated(true);
-    console.log('امتیاز:', rate);
-  } catch (error) {
-    console.error('خطا:', error);
+    // setRating(rateNum[id] || 0);
   }
-  finally{
-   if(Rated = false){  
-    window.location.reload();
-    }
+  if(id && Fav){
+    setFavStatus(true);
+  }
+  
+  // console.log("rateNum:", rateNum);
+  // console.log("ratedUser:", ratedUser);
+}, [id]);
+
+
+    const favHandler = async () => {
+  try {
+    // const token = localStorage.getItem('token');
    
+    const fetchFav = await apiClient.post(
+      "https://sepehracademy.liara.run/Course/AddCourseFavorite",{
+       courseId: id,
+      }
+    );
+    toast.success("دوره با موفقیت به علاقه مندی ها اضافه شد")
+     const Fav = JSON.parse(localStorage.getItem('fav') || '{}');
+    Fav[id] = true
+    localStorage.setItem('fav', JSON.stringify(Fav));
+     setFavStatus(true);
+    setTimeout(()=>{window.location.reload()},1500);
+  } catch(error) {
+    toast.error("خطا")
   }
 }
+  
+////////////////rating
+ 
+
+
+
+  const handleRating = async (rate) => {
+
+     if (Rated) {
+      console.log("قبلاً امتیاز داده‌اید");
+    toast.error("شما قبلاً امتیاز داده‌اید");
+    return;
+  }
+
+    try {  
+       console.log(rate);
+       console.log(id);
+    const courseRate = await apiClient.post(
+      `https://sepehracademy.liara.run/Course/SetCourseRating?CourseId=${id}&RateNumber=${rate}`
+    );
+    
+    
+    console.log('امتیاز:', rate);
+    toast.success('امتیاز شما با موفقیت ثبت شد');
+   
+    const ratedUser = JSON.parse(localStorage.getItem('rateUser') || '{}');
+    // const rateNum = JSON.parse(localStorage.getItem('ratenum') || '{}');
+    
+    ratedUser[id] = true;
+    // rateNum[id] = rate;
+    
+    localStorage.setItem('rateUser', JSON.stringify(ratedUser));
+    // localStorage.setItem('ratenum', JSON.stringify(rateNum));
+    setRated(true);
+    setTimeout(()=>{window.location.reload()},1500);
+  } catch (error) {
+    console.error('خطا:', error);
+    toast.error('شما قبلا به این دوره امتیاز داده اید');
+   
+  }
+  
 };
 /////////////////////
 
 //////////////////like/disslike
 
+
 const likeHandler = async ()=>{
-  try {
+   
+  try { 
+
+     if(like){
+      const formDataLike = new FormData();
+    formDataLike.append('CourseLikeId', selectedCourse.courseId);
+    const courseDeleteLike = await apiClient.delete(
+      `https://sepehracademy.liara.run/Course/DeleteCourseLike`,formDataLike,
+       {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+           'Content-Type': 'multipart/form-data'
+        }
+      }
+
+    );
+
+    delete likedCourses[selectedCourse.courseId];
+      localStorage.setItem('likedCourses', JSON.stringify(likedCourses));
+      setLike(false);
+    
+    toast.success('شما این دوره را لایک کردید و حذف لایک از سمت کاربر مجاز نیست');
+    }
+    else{ 
     const courseAddLike = await apiClient.post(
       `https://sepehracademy.liara.run/Course/AddCourseLike?CourseId=${selectedCourse.courseId}`
     );
-  } catch (error) {
+    toast.success('لایک با موفقیت ثبت شد');
+
+    }
+   }
+  catch (error) {
     console.error('خطا', error);
+    toast.error("خطا");
+    toast.error('شما این دوره را لایک کردید و حذف لایک از سمت کاربر مجاز نیست')
   }finally{
-    setLike(!like);
-    window.location.reload();
+    
+     setTimeout(() => {window.location.reload();}, 1000)
   }
 
-  if(like === true){
-     try {
-    const courseDeleteLike = await apiClient.delete(
-      `https://sepehracademy.liara.run/Course/DeleteCourseLike`
-    );
-  } catch (error) {
-    console.error('خطا', error);
-  }finally{
-    setLike(!like);
-    window.location.reload();
-  }
-   }
 }
 
+
 const dissLikeHandler = async ()=>{
+
    try {
-    const courseAddDissLike = await apiClient.post(
-      `https://sepehracademy.liara.run/Course/AddCourseDissLike?CourseId=${selectedCourse.courseId}`
+   
+      const token = localStorage.getItem('token');
+
+    if(dissLike){
+      const formDatadissLike = new FormData();
+    formDatadissLike.append('CourseDissLikeId', selectedCourse?.courseId);
+      const coursDeleteDissLike = await apiClient.delete(
+      `https://sepehracademy.liara.run/Course/DeleteCourseDissLike`,formDatadissLike,
+      {
+         
+        headers: {
+          'Authorization': `Bearer ${token}`,
+           'Content-Type': 'multipart/form-data'
+        }
+      }
     );
+      
+    }
+
+      else{
+     const courseAddDissLike = await apiClient.post(
+      `https://sepehracademy.liara.run/Course/AddCourseDissLike?CourseId=${selectedCourse?.courseId}`
+    );
+     toast.success('دیسلایک با موفقیت ثبت شد');
+     
+  }
   } catch (error) {
     console.error('خطا', error);
-  }finally{
-    setDissLike(!dissLike);
-    window.location.reload();
+     toast.error("خطا");
+     toast.error('شما این دوره را دیسلایک کردید و حذف لایک از سمت کاربر مجاز نیست')
   }
-   if(dissLike){
-     try {
-    const coursDeleteDissLike = await apiClient.delete(
-      `https://sepehracademy.liara.run/Course/DeleteCourseDissLike`
-    );
-  } catch (error) {
-    console.error('خطا', error);
-  }finally{
-    setDissLike(!dissLike);
-    window.location.reload();
+  finally{
+    
+     setTimeout(() => {window.location.reload();}, 1000)
   }
-   }
+
+   
 
 }
 
@@ -169,111 +276,178 @@ const dissLikeHandler = async ()=>{
 
 ///////////////////////////////////////////////////
 //comment
- const [showReplies, setShowReplies] = useState(false);
-  const [showReplyForm, setShowReplyForm] = useState(false);
+ const [showReplies, setShowReplies] = useState({});
+  const [showReplyForm, setShowReplyForm] = useState({});
+
+  const toggleReplyForm = (commentId) => {
+  setShowReplyForm(prev => ({
+    ...prev,
+    [commentId]: !prev[commentId]
+  }));
+};
+
+  const toggleReplies = (commentId) => {
+  setShowReplies(prev => ({
+    ...prev,
+    [commentId]: !prev[commentId]
+  }));
+};
+
   const [replyText, setReplyText] = useState('');
+
+  const [Comment,setComment]= useState([]);
+  const[Reply,setReply]= useState([]);
+  const[addcommentForm,setAddCommentForm] = useState(false);
+  /////////////////////////////////////////////
   const [likes, setLikes] = useState(20);
   const [dislikes, setDislikes] = useState(2);
   const [userVote, setUserVote] = useState(null);
 
-  const comments = [
-    {
-      id: 1,
-      author: 'محمد علی راه نشین',
-      date: '۲۷ تیر ۱۴۰۴',
-      text: 'دوره ی بسیار مفیدی بود ، استادانی عالی با تدریس متعالی (:',
-      likes: 20,
-      dislikes: 2,
-      replies: [
-        {
-          id: 1,
-          author: 'اژده های سیاه',
-          date: '۲۸ تیر ۱۴۰۴',
-          text: 'خیلی ممنون بابت نظر'
-        }
-      ]
-    },
-    {
-      id: 2,
-      author: 'محمد علی راه نشین',
-      date: '۲۷ تیر ۱۴۰۴',
-      text: 'دوره ی بسیار مفیدی بود ، استادانی عالی با تدریس متعالی (:',
-      likes: 20,
-      dislikes: 2,
-      replies: [
-        {
-          id: 2,
-          author: 'اژدهای سیاه',
-          date: '۲۸ تیر ۱۴۰۴',
-            text: 'خیلی ممنون بابت نظر'
-        }
-      ]
-    },
-    {
-      id: 3,
-      author: 'محمد علی راه نشین',
-      date: '۲۷ تیر ۱۴۰۴',
-      text: 'دوره ی بسیار مفیدی بود ، استادانی عالی با تدریس متعالی (:',
-      likes: 20,
-      dislikes: 2,
-      replies: [
-        {
-          id: 3,
-          author: 'اژدهای سیاه',
-          date: '۲۸ تیر ۱۴۰۴',
-           text: 'خیلی ممنون بابت نظر'
-        }
-      ]
-    },
-    {
-      id: 4,
-      author: 'محمد علی راه نشین',
-      date: '۲۷ تیر ۱۴۰۴',
-      text: 'دوره ی بسیار مفیدی بود ، استادانی عالی با تدریس متعالی (:',
-      likes: 20,
-      dislikes: 2,
-      replies: [
-        {
-          id: 4,
-          author: 'اژدهای سیاه',
-          date: '۲۸ تیر ۱۴۰۴',
-           text: 'خیلی ممنون بابت نظر'
-        }
-      ]
-    }
-  ];
+ 
+//  console.log("replyData:",Reply);
 
-  const handleLike = () => {
-    if (userVote === 'like') {
-      setLikes(likes - 1);
-      setUserVote(null);
-    } else {
-      if (userVote === 'dislike') setDislikes(dislikes - 1);
-      setLikes(likes + 1);
-      setUserVote('like');
-    }
-  };
 
-  const handleDislike = () => {
-    if (userVote === 'dislike') {
-      setDislikes(dislikes - 1);
-      setUserVote(null);
-    } else {
-      if (userVote === 'like') setLikes(likes - 1);
-      setDislikes(dislikes + 1);
-      setUserVote('dislike');
-    }
-  };
+   
+     useEffect(()=>{
+       const commentHandler = async ()=>{
+        try{
+           const fetchComment = await apiClient.get(`https://sepehracademy.liara.run/Course/GetCourseCommnets/${id}`);
+           setComment(fetchComment.data);
+            console.log("کامنت",fetchComment.data);
+             
+        }catch(error){
+          console.log("مشکل در بارگذاری کامنت",error);
+        }
+         
+       }
+       commentHandler();
+     },[id])
 
-  const handleReplySubmit = () => {
-    if (replyText.trim()) {
-      console.log('پاسخ جدید:', replyText);
-      setReplyText('');
-      setShowReplyForm(false);
-    }
-  };
+       const [replyId,setReplyId] = useState([]);
+
+      useEffect(()=>{
+       const ReplyHandler = async ()=>{
+        try{
+
+        
+
+           const fetchReply =  await Promise.all(
+            Comment.map(async el =>
+             apiClient.get(`https://sepehracademy.liara.run/Course/GetCourseReplyCommnets/${id}/${el.id}`),
+              ) 
+               );
+             const allReplies = fetchReply.reduce((acc, r) => [...acc, ...r.data], []);
+             setReply(allReplies);
+             
+             
+      
+        }catch(error){
+          console.log("مشکل در بارگذاری پاسخ کامنت",error);
+        }
+        
+       }
+        ReplyHandler()
+        
+     },[id,replyId,Comment]);
+
+  // console.log("reply:",Reply)
+
+
+
+
+ const addCommentHandler = async () => {
+  try {
+    const token = localStorage.getItem('token');
   
+    const formData = new FormData();
+    formData.append('CourseId', id);
+    formData.append('Title', replyText);
+    formData.append('Describe', 'this describe is for comment'); 
+    const addComment = await axios.post("https://sepehracademy.liara.run/Course/AddCommentCourse", formData,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+           'Content-Type': 'multipart/form-data'
+        }
+      }
+    );
+    
+    console.log("کامنت ثبت شد", addComment.data);
+    toast.success("کامنت با موفقیت ثبت شد و بعد از تایید ادمین  نمایش می شود.");
+    setReplyText('');
+  } catch(error) {
+    console.log("خطا در کامنت رخ داده", error);
+  } finally {
+    setAddCommentForm(false);
+  }
+}
 
+ const addReplyCommentHandler = async (Cid) => {
+  try {
+    const token = localStorage.getItem('token');
+      console.log("commentReplID:",Cid)
+    const formData = new FormData();
+    formData.append('CommentId', Cid);
+    formData.append('CourseId',id );
+    formData.append('Title', replyText); 
+    formData.append('Describe', 'this describe is for comment'); 
+    const addComment = await axios.post("https://sepehracademy.liara.run/Course/AddReplyCourseComment", formData,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+           'Content-Type': 'multipart/form-data'
+        }
+      }
+    );
+    
+    console.log("ریپلای ثبت شد", addComment.data);
+    toast.success("ریپلای با موفقیت ثبت شد");
+     setShowReplyForm(false)
+    setReplyText('');
+    console.log("داده ها ارسال شد");
+    setTimeout(() => {window.location.reload();}, 1500)
+    
+  } catch(error) {
+    console.log("خطا در ریپلای رخ داد", error);
+  }
+}
+
+///////////////////
+
+
+     const CommentlikeHandler = async (Ckid)=>{
+  try {
+    const commentAddLike = await apiClient.post(
+      `https://sepehracademy.liara.run/Course/AddCourseCommentLike?CourseCommandId=${Ckid}`
+    );
+    toast.success('لایک با موفقیت ثبت شد');
+    setTimeout(() => {window.location.reload();}, 1500)
+  } catch (error) {
+    console.error('خطا', error);
+     toast.error('حذف لایک از سمت کاربر مجاز نیست');
+  }
+
+}
+
+
+     const CommentdislikeHandler = async (Cdkid)=>{
+  try {
+    const commentAdddisLike = await apiClient.post(
+      `https://sepehracademy.liara.run/Course/AddCourseCommentDissLike?CourseCommandId=${Cdkid}`
+    );
+    toast.success('دیسلایک با موفقیت ثبت شد');
+    setTimeout(() => {window.location.reload();}, 1500)
+  } catch (error) {
+    console.error('خطا', error);
+    toast.error('حذف دیسلایک از سمت کاربر مجاز نیست');
+  }
+}
+
+
+
+
+
+ 
  
   return (
 
@@ -290,6 +464,13 @@ const dissLikeHandler = async ()=>{
         cost={selectedCourse.cost}
         capicity={selectedCourse.capacity}
         teacher={selectedCourse.teacherName}
+        status={selectedCourse.statusName}
+        title={selectedCourse.title}
+        startDate={selectedCourse.startTime}
+        endDate={selectedCourse.endTime}
+        teacherId={selectedCourse?.teacherId}
+        studentCount={selectedCourse?.studentCount}
+        id={id}
       />
        :
        <HandleSpecs
@@ -315,10 +496,11 @@ const dissLikeHandler = async ()=>{
       
           <div className="relative h-[80%] w-full">
             <img 
-              src={selectedCourse ? selectedCourse.imageAddress:null}
+              src={selectedCourse && selectedCourse.imageAddress || "/Img.png"}
+              onError={(e) => (e.currentTarget.src = "/Img.png")}
               className="h-full w-full rounded-[25px]"
             ></img>
-            <button className="flex justify-center items-center absolute lg:top-10 lg:right-10 right-5 top-5 lg:w-12 lg:h-12 h-6 w-6   backdrop-blur-sm rounded-full">
+            <button onClick={favHandler} className={`flex justify-center border border-[gray] hover:bg-[red] ${favStatus === true ? 'bg-[red]' : '' } items-center absolute lg:top-10 lg:right-10 right-5 top-5 lg:w-12 lg:h-12 h-6 w-6   backdrop-blur-sm rounded-full`}>
               <img src={Favorite}/>
             </button>
 
@@ -431,12 +613,51 @@ const dissLikeHandler = async ()=>{
            </div>
 
            <div className={` shadow-lg bg-white flex flex-col p-2 place-items-center rounded-[25px]`}>
-            <div className="flex mb-2  justify-between w-full h-[30px]">
+
+
+
+            <div className="addComment flex mb-2  justify-between w-full h-[30px]">
               <span>نظرات</span>
-              <button className="bg-[skyblue] flex items-center rounded-[7px] pr-5 pl-5">نظر شما</button>
+              <button onClick={()=>setAddCommentForm(true)} className="bg-[skyblue] relative flex items-center rounded-[7px] pr-5 pl-5">➕نظر شما</button>
+              {addcommentForm && (
+                       <div className="mt-4 p-4 z-200 lg:w-[55%] w-[80%] absolute right-[8%]  flex flex-col items-end bg-gray-50 rounded-xl">
+                         <button
+                            className=" flex items-center gap-1 w-[50px] mb-2 px-2 text-red-300 text-[12px] border  hover:bg-gray-200 rounded-[5px] transition"
+                             onClick={() => {
+                               setAddCommentForm(false);
+                               setReplyText('');
+                             }}
+                            
+                           >
+                            <img src={Out} className="w-[20%] h-[80%]"/>
+                             بستن
+                           </button>
+                         <input
+                         type="text"
+                           value={replyText}
+                           onChange={(e) => setReplyText(e.target.value)}
+                           placeholder="پاسخ خود را بنویسید..."
+                           className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           rows="3"
+                         />
+                         <div className="flex justify-end gap-2 mt-3">
+                          
+                           <button
+                            className=" flex items-center gap-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition"
+                             onClick={addCommentHandler}
+                            
+                           >
+                            <img src={Send} className="w-[35%] h-[80%]"/>
+                              ارسال 
+                           </button>
+                         </div>
+                       </div>
+                     )}
             </div>
-             <div className={`flex relative flex-row flex-wrap  place-items-center w-full ${showMore2 ? "":"overflow-hidden h-[470px]"}`}>
-                  {comments.map((comment) => (
+
+
+             <div className={`commentfetch  flex relative flex-row flex-wrap  place-items-center w-full ${showMore2 ? "":"overflow-hidden h-[470px]"}`}>
+                  {Comment.map((comment) => (
                  <div key={comment.id} className="bg-white w-full rounded-2xl shadow-lg p-6 mb-4">
                      
                      
@@ -447,14 +668,14 @@ const dissLikeHandler = async ()=>{
                          </div>
                          <div className="w-full lg:w-[700px] flex flex-row justify-between">
                            <h3 className="font-bold text-gray-800">{comment.author}</h3>
-                           <p className="text-sm whitespace-nowrap text-gray-500">{comment.date}</p>
+                           <p className="text-sm whitespace-nowrap text-gray-500">{comment?.insertDate?.slice(0,10)}</p>
                          </div>
                        </div>
                      </div>
          
                      
                      <p className="text-gray-700 leading-relaxed mb-4 pr-2">
-                       {comment.text}
+                       {comment.title}
                      </p>
          
                     
@@ -468,11 +689,11 @@ const dissLikeHandler = async ()=>{
                                ? 'bg-green-100 text-green-600' 
                                : 'hover:bg-gray-100 text-gray-600'
                            }`}
-                           onClick={handleLike}
+                           onClick={()=> CommentlikeHandler(comment.id)}
                            
                          >
                            <span className="text-xl"><img src={Like}/></span>
-                           <span className="font-medium">{likes}</span>
+                           <span className="font-medium">{comment?.likeCount}</span>
                          </button>
          
                          <button 
@@ -481,17 +702,17 @@ const dissLikeHandler = async ()=>{
                                ? 'bg-red-100 text-red-600' 
                                : 'hover:bg-gray-100 text-gray-600'
                            }`}
-                           onClick={handleDislike}
+                           onClick={()=> CommentdislikeHandler(comment.id)}
                          >
                            <span className="text-xl"><img src={Dislike}/></span>
-                           <span className="font-medium">{dislikes}</span>
+                           <span className="font-medium">{comment?.disslikeCount}</span>
                          </button>
                        </div>
          
                        
                        <button 
                        className="flex items-center gap-2 px-4 py-1 bg-blue-500  hover:bg-blue-600 text-white rounded-[25px] transition"
-                         onClick={() => setShowReplyForm(!showReplyForm)}
+                         onClick={() => toggleReplyForm(comment.id)}
                          
                        >
                         
@@ -501,7 +722,7 @@ const dissLikeHandler = async ()=>{
                      </div>
          
                     
-                     {showReplyForm && (
+                     {showReplyForm[comment.id] && (
                        <div className="mt-4 p-4 flex flex-col items-end bg-gray-50 rounded-xl">
                          <button
                             className=" flex items-center gap-1 w-[50px] mb-2 px-2 text-red-300 text-[12px] border  hover:bg-gray-200 rounded-[5px] transition"
@@ -514,7 +735,8 @@ const dissLikeHandler = async ()=>{
                             <img src={Out} className="w-[20%] h-[80%]"/>
                              بستن
                            </button>
-                         <textarea
+                         <input
+                         type="text"
                            value={replyText}
                            onChange={(e) => setReplyText(e.target.value)}
                            placeholder="پاسخ خود را بنویسید..."
@@ -525,7 +747,7 @@ const dissLikeHandler = async ()=>{
                           
                            <button
                             className=" flex items-center gap-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition"
-                             onClick={handleReplySubmit}
+                             onClick={() => addReplyCommentHandler(comment.id)}
                             
                            >
                             <img src={Send} className="w-[35%] h-[80%]"/>
@@ -536,36 +758,38 @@ const dissLikeHandler = async ()=>{
                      )}
          
                      
-                     {comment.replies && comment.replies.length > 0 && (
+                     {Reply && Reply.length > 0 && (
                        <div className=" flex flex-row flex-wrap items-center ">
                         <div className="border-b order-1 border-gray-100 w-155"></div>
                          <button
                          className=" text-gray-500 order-2 hover:text-blue-700 text-[10px]  flex items-center gap-2"
-                           onClick={() => setShowReplies(!showReplies)}
+                          onClick={() => toggleReplies(comment.id)}
                            
                          >
-                           <span>{showReplies ? '▼' : '◀'}</span>
-                           <span>مشاهده جواب ها ({comment.replies.length})</span>
+                           <span>{showReplies[comment.id] ? '▼' : '◀'}</span>
+                           <span>({Reply.filter(r => r.parentId === comment.id).length})
+                            مشاهده جواب ها</span>
                          </button>
                          
          
                          
-                         {showReplies && (
+                         {showReplies[comment.id] && (
                            <div className="mt-4 w-full pr-8 order-3 space-y-4">
-                             {comment.replies.map((reply) => (
+                             {Reply.map((reply) => (
+                              reply.parentId === comment.id && (
                                <div key={reply.id} className="bg-gray-50 rounded-[25px] p-4 border border-[gray]/50 m-2 ">
                                  <div className="flex items-center gap-3 mb-3">
                                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-xl">
                                      <img className="w-full h-full rounded-full" src={CommentImg}/>
                                    </div>
                                    <div className="flex flex-row justify-between w-full">
-                                     <h4 className="font-medium text-gray-800">{reply.author}</h4>
-                                     <p className="text-xs text-gray-500 font-medium">{reply.date}</p>
+                                     <h4 className="font-medium text-gray-800">{reply?.author}</h4>
+                                     <p className="text-xs text-gray-500 font-medium">{reply?.insertDate?.slice(0,10)}</p>
                                    </div>
                                  </div>
-                                 <p className="text-gray-700 text-sm pr-2">{reply.text}</p>
+                                 <p className="text-gray-700 text-sm pr-2">{reply?.title}</p>
                                </div>
-                             ))}
+                             )))}
                            </div>
                          )}
                        </div>
@@ -584,6 +808,10 @@ const dissLikeHandler = async ()=>{
            </div>
 
         </div>
+
+
+
+
 
         <div className={`relatedProduct bg-white shadow-md  rounded-[20px]  w-[full] lg:w-[35%] ${moreCourse ? "":"overflow-hidden h-[560px]"} 
          rounded-[20px] py-[5px] font-medium text-xs px-[5px] pb-[15px] flex flex-col`}>
@@ -609,7 +837,7 @@ const dissLikeHandler = async ()=>{
                    like={relate.likeCount}
                    category={relate.levelName}
                    teacher={relate.teacherName}
-                   Img={relate.imageAddress || relate.tumbImageAddress}
+                   Img={relate.imageAddress || relate.tumbImageAddress || "/cover3.png"}
                    date={relate.startTime}
 
                 />

@@ -2,8 +2,10 @@ import {useNavigate  } from "react-router-dom"
 import React from "react"
 import { Formik } from "formik"
 import { Form ,Field,ErrorMessage} from "formik"
+import toast from "react-hot-toast"
 import * as Yup from "yup";
 import apiClient from "../../hook/interceptor"
+
 
 const validationSchema=Yup.object({
   email:Yup.string().required("لطفا  ایمیل خود را وارد کنید"),
@@ -14,20 +16,26 @@ const stepOwnres = () => {
 
 
  const stepOwn =async(emile)=>{
-    try{
-       const RegOwners = await apiClient.post("https://sepehracademy.liara.run/Sign/ForgetPassword",{
-         gmail : emile ,
-         baseUrl :"https://localhost:5173/resetpassword"
-           
-       });
-        navigate(`/ress/stepTowres/${emile}`);
-        alert("رمز جدید را وارد کنید")
-       
-    }catch(error){
-    console.error(error.response);
-    alert("این ایمیل وجود ندارد")
-    }
-   
+    try{  
+          const response= await apiClient.post(
+            "https://sepehracademy.liara.run/Sign/ForgetPassword",
+            { email: emile ,
+               baseUrl: `${window.location.origin}/ress/stepTowres`
+            }
+          );
+
+          console.log(response)
+          if(response.data.success){
+            toast.success("لینک برای ایمیل شما ارسال شد")
+            // navigate("stepTowres")
+          }
+    else{ toast.info("کاربر یافت نشد")} 
+        }catch(error){
+       if(error.response.data.success===false){toast.error("کاربر یافت نشد")}
+       console.log(error)
+       toast.success("خطا")
+        }
+
 
  }
 

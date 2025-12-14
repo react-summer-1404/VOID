@@ -2,6 +2,7 @@ import { Link ,useNavigate,useParams } from "react-router-dom"
 import React from "react"
 import { Formik } from "formik"
 import { Form ,Field,ErrorMessage} from "formik"
+import toast from "react-hot-toast"
 import * as Yup from "yup";
 import apiClient from "../../hook/interceptor"
 const validationSchema=Yup.object({
@@ -18,18 +19,15 @@ const stepTow = () => {
         gmail : emile,
         verifyCode : cod    
        });
-       alert("go to third part");
-        navigate("/Reg/StepThree")
+
+       toast("شماره تلفن،ایمیل و رمز عبور خود را تایین کنید")
+       navigate("/Reg/StepThree")
        
     }catch(error){
-       alert("error");
+       toast("کد اشتباه است")
     }
     
  }
-
-
-
-
 
 
   return (
@@ -77,11 +75,12 @@ component={"p"}
   </div>
       <button type="submit"  className="w-[100%] h-[48px] appearance-none !bg-[#3C8B85] !text-white px-4 py-2 rounded-lg"> تایید
       </button>
-      <button onClick={()=>navigate("/Reg/stepOwn")} className="w-[100%] h-[48px] mt-[10px] appearance-none border-2 !border-[#3C8B85] text-[#3C8B85] px-4 py-2 rounded-lg"> تعییر شماره همراه
+      <button  onClick={()=>navigate("/Reg/stepOwn")} className="w-[100%] h-[48px] mt-[10px] appearance-none border-2 !border-[#3C8B85] text-[#3C8B85] px-4 py-2 rounded-lg"> تعییر ایمیل 
       </button> 
 </Form>
-
+    
  </Formik>
+ 
  </div>
   )
 }

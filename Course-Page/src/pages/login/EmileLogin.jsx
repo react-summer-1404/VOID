@@ -3,6 +3,9 @@ import React from "react"
 import { Formik } from "formik"
 import apiClient from "../../hook/interceptor"
 import { Form ,Field,ErrorMessage} from "formik"
+import { useContext } from "react"
+import { AuthContext } from "../../hook/authContext"
+import toast from "react-hot-toast"
 
 import * as Yup from "yup";
 const validationSchema=Yup.object({
@@ -13,23 +16,36 @@ const validationSchema=Yup.object({
 const EmileLogin = () => {
     const navigate = useNavigate();
     
-   const handleLogin = async (emile,pass) => {
+    const {login} = useContext(AuthContext);
+
+   const handleLogin = async (emile,pass,rememberMee) => {
            try {
         const response = await apiClient.post('https://sepehracademy.liara.run/Sign/Login', {
            phoneOrGmail: emile,
            password: pass,
-           rememberMe: true
+           rememberMe: rememberMee
         });
-        
-        localStorage.setItem('token', response.data.token);
+         localStorage.setItem('token', response.data.token);
+       
         console.log('ورود موفقیت آمیز', response.data);
+          //  console.log(rememberMee)
+         const userData = {  
+          phoneOrGmail: emile,
+           password: pass,
+           rememberMe: rememberMee
+          };
 
-        alert("ورود با موفقیت انجام شد")
-        navigate("/")
-  
+         login(response.data.token, userData);
+
+        // alert("ورود با موفقیت انجام شد")
+         toast.success("به دکتر تل خوش آمدید!😍");
+        setInterval(()=>{navigate("/")},1000);
+         setTimeout(()=>{window.location.reload()},1500);
+
       } catch (error) {
         console.error('خطاورود', error);
-        alert("ایمیل یا رمز عبور اشتباه است")
+        
+        toast("ایمیل یا رمز عبور اشتباه است")
       }
     };
    
@@ -48,9 +64,10 @@ const EmileLogin = () => {
 initialValues={{
   emile:'',
   pass:'',
+  remember: false,
 }}
 onSubmit ={(values)=>{
-    handleLogin(values.emile,values.pass);
+    handleLogin(values.emile,values.pass,values.remember);
 }}
 validationSchema={validationSchema}
 >
@@ -93,11 +110,13 @@ lg:h-[100%] '>
        component={"p"}
               /> 
   <div className=" mt-[10px] w-[100%] h-[10%] ">
-  <input className=" float-right w-[16px] h-[16px]  "
+  <Field className=" float-right w-[16px] h-[16px]  "
         type="checkbox"
-        id="save"
+        id="remember"
+        name="remember"
+        
       />
-      <label className=" float-right text-[12px] mr-1" id="save">مرا به خاطر بسپار</label>
+      <label className=" float-right text-[12px] mr-1" id="remember">مرا به خاطر بسپار</label>
        <Link to={"/ress"} className="float-left cursor-pointer text-[#9B0EE1] underline">فراموشی رمز</Link>
   </div>
       <button  className="w-[100%] h-[48px] appearance-none !bg-[#3C8B85] !text-white px-4 py-2 rounded-lg"

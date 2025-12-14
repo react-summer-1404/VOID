@@ -4,31 +4,73 @@ import Slider from "rc-slider"
 import "rc-slider/assets/index.css";
 import "../assets/style/tailwinds/tailwindSt(content).css"
 import SortingBox from "../component/sortingBox"
+import axios from "axios"
 
 const sidePart =({filterBt,Product,setCourseData,setFilters,filters,range,setRange,activeFilters,setFilterNull,setActiveFilters,updateActiveFilters,})=>{
   
   const [showCategories, setShowCategories] = useState(false);
   const [showCourseLevel, setShowCourseLevel] = useState(false);
   const [showTeachers, setShowTeachers] = useState(false);
+  ///////////////////////////////////////////////////////////////
+  const[catApi,setCat]=useState([]);
+  const[levApi,setLev]=useState([]);
+  const[teachApi,setTeach]=useState([]);
+//  console.log(catApi);
+ 
+   useEffect(()=>{
+     const catHandle =async ()=>{
+      try{
+        const categ = await axios.get("https://sepehracademy.liara.run/Home/GetTechnologies");
+        setCat(categ.data);
+       }catch(error){console.log("ارور از دسته بندی",error)};
+
+     }
+     catHandle()
+   },[])  
+   useEffect(()=>{
+    const LevHandle =async ()=>{
+      try{
+        const level = await axios.get("https://sepehracademy.liara.run/CourseLevel/GetAllCourseLevel");
+        setLev(level.data)
+       }catch(error){console.log("ارور از سطح",error)};
+
+     }
+     LevHandle()
+   },[])  
+   useEffect(()=>{
+    const TeacherHandle =async ()=>{
+      try{
+        const teachr = await axios.get("https://sepehracademy.liara.run/Home/GetTeachers");
+        setTeach(teachr.data)
+
+       }catch(error){console.log("ارور از استاد",error)};
+
+     }
+     TeacherHandle()
+   },[])  
+
+
 
  
-  const categories = [
-    { id: 1,describe:"react" ,name: 'دوره ریکت'},
-    { id: 2,describe:"ux" ,name: 'UX دوره ' },
-    { id: 3,describe:"backend" ,name: 'دوره بک‌اند' },
-    { id: 4,describe:"bahr" ,name: 'دوره بحر'}
-  ];
+  // const categories = [
+  //   { id: 1,describe:"react" ,name: 'دوره ریکت'},
+  //   { id: 2,describe:"ux" ,name: 'UX دوره ' },
+  //   { id: 3,describe:"backend" ,name: 'دوره بک‌اند' },
+  //   { id: 4,describe:"bahr" ,name: 'دوره بحر'}
+  // ];
 
-  const courseLevel = [
-    {id : 1 ,LvId:"1" ,name :'مقدماتی'},
-     {id : 2 ,LvId:"2",name:'متوسط'},
-      {id : 3 ,LvId:"3",name:'پیشرفته'}
-  ];
-  const teachers = [
-    {id : 1 , name:'استاد میثم'}, 
-    {id : 2 , name:'استاد صبح خیز'}, 
-    {id : 3 , name:'استاد بحرالعلوم'}
-  ];
+  // const courseLevel = [
+  //   {id : 1 ,LvId:"1" ,name :'مقدماتی'},
+  //    {id : 2 ,LvId:"2",name:'متوسط'},
+  //     {id : 3 ,LvId:"3",name:'پیشرفته'}
+  // ];
+  // const teachers = [
+  //   {id : 1 , name:'استاد میثم'}, 
+  //   {id : 2 , name:'استاد صبح خیز'}, 
+  //   {id : 3 , name:'استاد بحرالعلوم'}
+  // ];
+
+
 
    const handleCategoryChange = (category) => {
     const newCategory = filters.category === category ? '' : category;
@@ -156,19 +198,19 @@ const handleMaxChange = (e) => {
          </div>
          
          {showCategories && (
-           <ul className="absolute top-full left-0 w-full mt-1 bg-white shadow-lg rounded-b-lg z-50 border border-gray-200">
-             {categories.map((cat) => (
+           <ul className="absolute top-full h-[110px] overflow-y-auto left-0 w-full mt-1 bg-white shadow-lg rounded-b-lg z-50 border border-gray-200">
+             {catApi.map((cat) => (
                <li key={cat.id}>
                  <label
                    className={`block px-4 py-2 text-sm cursor-pointer hover:bg-teal-500 hover:text-white ${
-                     filters.category === cat.name ? '!bg-orange-500 !text-white' : ''
+                     filters.category === cat.techName ? '!bg-orange-500 !text-white' : ''
                    }`}
                    onClick={() => {
-                     handleCategoryChange(cat.describe);
+                     handleCategoryChange(cat.techName);
                      setShowCategories(false);
                    }}
                  >
-                   {cat.name}
+                   {cat.techName}
                  </label>
                </li>
              ))}
@@ -196,19 +238,19 @@ const handleMaxChange = (e) => {
          </div>
          
          {showCourseLevel && (
-           <ul className="absolute top-full left-0 w-full mt-1 bg-white shadow-lg rounded-b-lg z-50 border border-gray-200">
-             {courseLevel.map((lvl) => (
+           <ul className="absolute top-full h-[110px] overflow-y-auto left-0 w-full mt-1 bg-white shadow-lg rounded-b-lg z-50 border border-gray-200">
+             {levApi.map((lvl) => (
                <li key={lvl.id}>
                  <label
                    className={`block px-4 py-2 text-sm cursor-pointer hover:bg-teal-500 hover:text-white ${
-                     filters.courseLevel === lvl.name ? '!bg-orange-500 !text-white' : ''
+                     filters.courseLevel === lvl.levelName ? '!bg-orange-500 !text-white' : ''
                    }`}
                    onClick={() => {
-                    handleCourseLevelChange(lvl.LvId);
+                    handleCourseLevelChange(lvl.id);
                      setShowCourseLevel(false);
                    }}
                  >
-                   {lvl.name}
+                   {lvl.levelName}
                  </label>
                </li>
              ))}
@@ -227,7 +269,7 @@ const handleMaxChange = (e) => {
        
        <div className="relative">
          <div
-          className="border border-gray-300 rounded-lg p-2 text-sm text-gray-700 cursor-pointer flex justify-between items-center hover:bg-gray-50"
+          className="border border-gray-300  rounded-lg p-2 text-sm text-gray-700 cursor-pointer flex justify-between items-center hover:bg-gray-50"
            onClick={() => setShowTeachers(!showTeachers)}
           
          >
@@ -236,19 +278,19 @@ const handleMaxChange = (e) => {
          </div>
          
          {showTeachers && (
-           <ul className="absolute top-full left-0 w-full mt-1 bg-white shadow-lg rounded-b-lg z-50 border border-gray-200">
-             {teachers.map((Tch) => (
+           <ul className="absolute top-full h-[110px] overflow-y-auto left-0 w-full mt-1 bg-white shadow-lg rounded-b-lg z-50 border border-gray-200">
+             {teachApi.map((Tch) => (
                <li key={Tch.id}>
                  <label
                    className={`block px-4 py-2 text-sm cursor-pointer hover:bg-teal-500 hover:text-white ${
-                     filters.teacher === Tch.name ? '!bg-orange-500 !text-white' : ''
+                     filters.teacher === Tch.fullName ? '!bg-orange-500 !text-white' : ''
                    }`}
                    onClick={() => {
-                      handleTeacherChange(Tch.name);
+                      handleTeacherChange(Tch.fullName);
                      setShowTeachers(false);
                    }}
                  >
-                   {Tch.name}
+                   {Tch.fullName}
                  </label>
                </li>
              ))}

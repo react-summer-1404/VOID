@@ -31,7 +31,7 @@ const newsContent = () => {
       useEffect(()=>{
         const fetchNews = async ()=>{
           try{  
-        const response = await axios.get("https://sepehracademy.liara.run/News?PageNumber=1&RowsOfPage=10&SortingCol=InsertDate&SortType=DESC");
+        const response = await axios.get("https://sepehracademy.liara.run/News?PageNumber=1&RowsOfPage=1000&SortingCol=InsertDate&SortType=DESC");
         const data = await response.data.news;
             setNews(data);
             // console.log("data",data);
@@ -61,6 +61,18 @@ const newsContent = () => {
      console.log("to",new Date(filters.ToDate));
 
       const [showCategories, setShowCategories] = useState(false);
+      const [catApi,setCat]=useState([]);
+
+       useEffect(()=>{
+     const catHandle =async ()=>{
+      try{
+        const categ = await axios.get(`https://sepehracademy.liara.run/News/GetListNewsCategory`);
+        setCat(categ.data);
+       }catch(error){console.log("ارور از دسته بندی",error)};
+
+     }
+     catHandle()
+   },[])  
 
   const categories = [
     { id: 1,describe:"react" ,name: 'دوره ریکت'},
@@ -110,7 +122,7 @@ const newsContent = () => {
      const FilteredCourse = SortCourse.filter((el) => {
      
      const matchCategory = 
-       !filters.category || el.title === filters.category; 
+       !filters.category || el.newsCatregoryName === filters.category; 
 
      const DateMatchTo =
      !filters.ToDate || new Date(el.insertDate) <= new Date(filters.ToDate);  
@@ -140,7 +152,7 @@ const newsContent = () => {
     setActiveFilters(count);
   };
 
-    //filter trun on/off
+    
 
     const [filterBt,setFilterBt] = useState(false);
     // console.log(filterBt)
@@ -149,30 +161,131 @@ const newsContent = () => {
 ///////////////////////////////////////
   // console.log(courseData)
 
-     // تعداد محصول در هر صفحه
+     
      
      const [currentPage, setCurrentPage] = useState(1);
-     const itemsPerPage = 5;  
+     const itemsPerPage = 9;  
    
-  //محسابه تعداد محصول در هر صفحه
+  
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   
-  // چک کن که courseData آرایه باشه و پر باشه
+ 
 const currentItems = Array.isArray(FilteredCourse) && FilteredCourse.length > 0
   ? FilteredCourse.slice(indexOfFirstItem, indexOfLastItem) 
   : [];
 
-// تعداد کل صفحات
+
 const totalPages = Array.isArray(FilteredCourse) && FilteredCourse.length > 0
   ? Math.ceil(FilteredCourse.length / itemsPerPage)
   : 0;  
 
-  // تابع برای تغییر صفحه
+ 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
     window.scrollTo({ top: 100, behavior:"smooth"});
   };
+
+
+  const renderPageButtons = () => {
+    const buttons = [];
+    const maxVisible = 5;
+
+    if (totalPages <= maxVisible) {
+   
+      for (let i = 1; i <= totalPages; i++) {
+        buttons.push(
+          <button
+            key={i}
+            onClick={() => handlePageChange(i)}
+            className={`w-8 h-8 text-center rounded ${
+              currentPage === i
+                ? "bg-purple-600 text-white"
+                : "bg-gray-200 hover:bg-gray-300"
+            }`}
+          >
+            {i}
+          </button>
+        );
+      }
+    } else {
+    
+      buttons.push(
+        <button
+          key={1}
+          onClick={() => handlePageChange(1)}
+          className={`w-8 h-8 text-center rounded ${
+            currentPage === 1
+              ? "bg-purple-600 text-white"
+              : "bg-gray-200 hover:bg-gray-300"
+          }`}
+        >
+          1
+        </button>
+      );
+
+      
+      if (currentPage > 3) {
+        buttons.push(
+          <span
+            key="dots1"
+            className="w-8 h-8 flex items-center justify-center"
+          >
+            ...
+          </span>
+        );
+      }
+
+      const startPage = Math.max(2, currentPage - 1);
+      const endPage = Math.min(totalPages - 1, currentPage + 1);
+
+      for (let i = startPage; i <= endPage; i++) {
+        buttons.push(
+          <button
+            key={i}
+            onClick={() => handlePageChange(i)}
+            className={`w-8 h-8 text-center rounded ${
+              currentPage === i
+                ? "bg-purple-600 text-white"
+                : "bg-gray-200 hover:bg-gray-300"
+            }`}
+          >
+            {i}
+          </button>
+        );
+      }
+
+     
+      if (currentPage < totalPages - 2) {
+        buttons.push(
+          <span
+            key="dots2"
+            className="w-8 h-8 flex items-center justify-center"
+          >
+            ...
+          </span>
+        );
+      }
+
+      
+      buttons.push(
+        <button
+          key={totalPages}
+          onClick={() => handlePageChange(totalPages)}
+          className={`w-8 h-8 text-center rounded ${
+            currentPage === totalPages
+              ? "bg-purple-600 text-white"
+              : "bg-gray-200 hover:bg-gray-300"
+          }`}
+        >
+          {totalPages}
+        </button>
+      );
+    }
+
+    return buttons;
+  };
+
 
 
 ///////////////////////////////////////////
@@ -197,7 +310,7 @@ return(
 			
 		</div>	
 
-    {/*category*/}
+    
      <div className=" font-medium  rounded-[5px] p-[3px] w-[95%] pr-2">
        <label className="text-xs font-medium text-gray-700 block mb-3 pr-2">
          دسته‌بندی
@@ -214,19 +327,19 @@ return(
          </div>
          
          {showCategories && (
-           <ul className="absolute top-full left-0 w-full mt-1 bg-white shadow-lg rounded-b-lg z-50 border border-gray-200">
-             {categories.map((cat) => (
+           <ul className="absolute top-full h-[110px] overflow-y-auto left-0 w-full mt-1 bg-white shadow-lg rounded-b-lg z-50 border border-gray-200">
+             {catApi.map((cat) => (
                <li key={cat.id}>
                  <label
                    className={`block px-4 py-2 text-sm cursor-pointer hover:bg-teal-500 hover:text-white ${
-                     filters.category === cat.name ? '!bg-orange-500 !text-white' : ''
+                     filters.category === cat.categoryName ? '!bg-orange-500 !text-white' : ''
                    }`}
                    onClick={() => {
-                     handleCategoryChange(cat.describe);
+                     handleCategoryChange(cat.categoryName);
                      setShowCategories(false);
                    }}
                  >
-                   {cat.name}
+                   {cat.categoryName}
                  </label>
                </li>
              ))}
@@ -257,7 +370,7 @@ return(
 
         </div>
 
-    {/*sortBy*/}
+    
      <div className="sorting w-[90%] block md:hidden " >
        <label className="text-xs font-medium text-gray-700 block mb-3 pr-2">
          مرتب سازی
@@ -314,49 +427,56 @@ return(
 
     {currentItems.map((card)=>(
             <NewsCard 
+
+             miniDescribe={card.miniDescribe}
             key={card.id}
+            newsCatregoryName={card.newsCatregoryName}
             view={card.currentView}
             id={card.id}
             name={card.title}
             like={Math.round(card.newsRate.avg/card.newsRate.count ? card.newsRate.avg/card.newsRate.count : 0)}
             category={card.levelName}
-            teacher={card.teacherName}
-            Img={card.currentImageAddress || card.currentImageAddressTumb}
+            teacher={card.addUserFullNam}
+            Img={card.currentImageAddress || card.currentImageAddressTumb || "/cover5.png"}
             date={card.startTime}
           />
         ))}
 
        
-      <div className="pagebuttons w-full p-5 flex justify-center mt-6 space-x-2">
+       <div className=" w-full p-5 flex justify-center mt-6 space-x-2">
+            <button
+              type="submit"
+              onClick={() =>
+                currentPage != 1 && setCurrentPage(currentPage - 1)
+              }
+              disabled={currentPage === 1}
+              className={`w-8 h-8 text-center rounded ${
+                currentPage === 1
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-gray-200 hover:bg-gray-300"
+              }`}
+            >
+              {"<"}
+            </button>
 
-        <button type="submit" onClick={()=>currentPage !=1 && setCurrentPage(currentPage -1)}
-          className={` w-8 h-8 text-center  rounded ${
-              currentPage === 1
-                ? "bg-purple-600 text-white"
-                : "bg-gray-200 hover:bg-gray-300"
-            }`}>{"<"}</button>
-        {Array.from({ length: totalPages }, (_,i) => i + 1).map((page) => (
-          <button
-            key={page}
-            onClick={() => handlePageChange(page)}
-            className={` w-8 h-8 text-center  rounded ${
-              currentPage === page
-                ? "bg-purple-600 text-white"
-                : "bg-gray-200 hover:bg-gray-300"
-            }`}
-          >
-            {page}
-          </button>
-        ))}
-         <button type="submit" onClick={()=>totalPages != currentPage && setCurrentPage(currentPage + 1)} 
-          className={` w-8 h-8 text-center  rounded ${
-              currentPage === totalPages
-                ? "bg-purple-600 text-white"
-                : "bg-gray-200 hover:bg-gray-300"
-            }`}>{">"}</button>
-      </div>
-        
-    </div>	
+            {renderPageButtons()}
+
+            <button
+              type="submit"
+              onClick={() =>
+                totalPages != currentPage && setCurrentPage(currentPage + 1)
+              }
+              disabled={currentPage === totalPages}
+              className={`w-8 h-8 text-center rounded ${
+                currentPage === totalPages
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-gray-200 hover:bg-gray-300"
+              }`}
+            >
+              {">"}
+            </button>
+          </div>
+          </div>
 
 	</div>
  </div>
